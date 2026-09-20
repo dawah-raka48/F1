@@ -81,3 +81,31 @@ async function loadRemoteData(){
   const result=await apiGet('getData');
   return {classes:result.classes||[],assessments:result.assessments||[]};
 }
+
+
+async function deleteRemoteAssessment(id){
+  const body=new URLSearchParams();
+  body.set('action','deleteAssessment');
+  body.set('payload',JSON.stringify({assessmentId:String(id)}));
+  const request=fetch(API_URL,{
+    method:'POST',
+    mode:'no-cors',
+    headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},
+    body:body.toString()
+  });
+  await Promise.race([
+    request.catch(()=>null),
+    new Promise(resolve=>setTimeout(resolve,2500))
+  ]);
+  const started=Date.now();
+  while(Date.now()-started<12000){
+    try{
+      const remote=await loadRemoteData();
+      if(!remote.assessments.some(a=>String(a.id)===String(id))){
+        return {success:true,confirmed:true};
+      }
+    }catch(e){}
+    await new Promise(resolve=>setTimeout(resolve,700));
+  }
+  throw new Error('Delete confirmation timed out');
+}
