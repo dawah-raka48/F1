@@ -1,8 +1,8 @@
-const API_URL='https://script.google.com/macros/s/AKfycbxme-qx5jCzov2aL1ez3kf-0_hUx_DughdvyDN0sE-kYfwejFyelkZG4xihOpHg_2zIGA/exec';
+const API_URL='https://script.google.com/macros/s/AKfycbwbqGTNeSgPxBweqmDLXQK4kfccbLxXXHAs9a5Shn6im5x-BTcnp6iE8wTT3Jqdg6-WSA/exec';
 
 async function apiGet(action='getData'){
-  const response=await fetch(API_URL+'?action='+encodeURIComponent(action));
-  if(!response.ok) throw new Error('API request failed');
+  const response=await fetch(API_URL+'?action='+encodeURIComponent(action),{cache:'no-store'});
+  if(!response.ok) throw new Error('API request failed: '+response.status);
   const data=await response.json();
   if(data.success===false) throw new Error(data.error||'API Error');
   return data;
@@ -14,7 +14,7 @@ async function apiPost(action,payload={}){
     headers:{'Content-Type':'text/plain;charset=utf-8'},
     body:JSON.stringify({action,...payload})
   });
-  if(!response.ok) throw new Error('API request failed');
+  if(!response.ok) throw new Error('API request failed: '+response.status);
   const data=await response.json();
   if(data.success===false) throw new Error(data.error||'API Error');
   return data;
