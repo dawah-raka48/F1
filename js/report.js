@@ -10,7 +10,7 @@ function build(a){
  '<div class="info-grid"><div><label>WEEK</label><b>'+esc(a.week||'—')+'</b></div><div><label>FROM</label><b>'+esc(a.from||'—')+'</b></div><div><label>TO</label><b>'+esc(a.to||'—')+'</b></div><div><label>TEACHER NAME</label><b>'+esc(a.teacher||'—')+'</b></div></div>'+
  '<div class="scale-box"><strong>RATING SCALE</strong><span><b>5</b> = Excellent</span><span><b>4</b> = Very Good</span><span><b>3</b> = Good</span><span><b>2</b> = Fair</span><span><b>1</b> = Needs Improvement</span></div>'+
  '<table class="pdf-table"><colgroup><col class="w-no"><col class="w-name">'+subjects.map(()=>'<col class="w-sub">').join('')+'<col class="w-average"><col class="w-notes"></colgroup><thead><tr><th>No.</th><th>Student Name</th>'+subjects.map(s=>'<th>'+s+'</th>').join('')+'<th>Average</th><th>Notes</th></tr></thead><tbody>'+body+'</tbody><tfoot><tr><td colspan="2">Class Average</td>'+averages+'<td></td><td></td></tr></tfoot></table>'+
- '<div class="signature-row"><div>Teacher Signature <span></span></div><div><b>Halley International School – HIS</b><small>Weekly Student Assessment</small></div><div>Date <span></span></div></div>'+
+ '<div class="report-bottom"><div><strong>Teacher Signature</strong><span></span></div><div><strong>Halley International School – HIS</strong><small>Weekly Student Assessment</small></div><div><strong>Date</strong><span></span></div></div>'+
  '</div>';
 }
 function showPdf(a){
