@@ -83,3 +83,50 @@
 .student-add{display:flex;gap:8px;margin-bottom:14px}.student-add input{flex:1}.student-list{display:grid;gap:7px;max-height:380px;overflow:auto}.student-row{display:flex;align-items:center;gap:8px}.student-number{width:32px;color:#9aa7b3;font-size:10px;font-weight:800;text-align:center}.student-row input{flex:1;height:38px;padding:8px 11px}.mini-btn{width:36px;height:36px;border:0;border-radius:9px;cursor:pointer}.mini-btn.danger{background:#fff1f1;color:#d64545}.empty-students{text-align:center;padding:30px;color:#718096}.empty-students i{font-size:24px;color:#a9b6c2}.toast{position:fixed;right:22px;bottom:22px;z-index:1100;background:#173f68;color:#fff;padding:12px 15px;border-radius:11px;box-shadow:0 15px 40px #173f6840;display:flex;gap:9px;transform:translateY(20px);opacity:0;transition:.25s}.toast.show{transform:translateY(0);opacity:1}.toast.success i{color:#67d69e}.toast.error i{color:#ff8e8e}
 @media(max-width:800px){.dashboard{padding:25px 16px}.header-inner{padding:14px 16px}.brand-name{font-size:11px}.header-actions .live-pill{display:none}.welcome-row{align-items:stretch;flex-direction:column}.welcome-row h1{font-size:28px}.dashboard-stats{grid-template-columns:1fr}.section-head{align-items:flex-start;gap:10px}.class-grid{grid-template-columns:1fr}.modal-card{padding:18px}.modal-actions{flex-wrap:wrap}.modal-actions .btn{flex:1}}
 .assessment-hero{background:linear-gradient(135deg,#fff,#f4f9fd);border:1px solid #dfe8ef;border-radius:20px;padding:25px 27px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;gap:20px;box-shadow:0 12px 35px #173f6809}.assessment-hero h1{margin:5px 0;font-size:28px}.assessment-hero p{margin:0;color:#718096;font-size:12px}.assessment-actions{display:flex;gap:8px;white-space:nowrap}.assessment-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}.assessment-summary>div{background:#fff;border:1px solid #e2e8f0;border-radius:13px;padding:12px 15px}.assessment-summary span{font-size:10px;color:#718096}.assessment-summary strong{display:block;font-size:20px;color:#123c63;margin-top:3px}.rating{font-size:12px;color:#596978}.rating i{color:#2f8fca;margin-right:5px}@media(max-width:800px){.assessment-hero{flex-direction:column;align-items:stretch}.assessment-actions{white-space:normal}.assessment-actions .btn{flex:1}.assessment-summary{grid-template-columns:repeat(2,1fr)}}
+/* APP POLISH — clean, balanced, teacher-first interface */
+html{scroll-behavior:smooth}
+body.app-body{letter-spacing:.05px}
+.app-header{position:sticky;top:0;z-index:50}
+.header-inner{min-height:72px}
+.assessment-hero{border-color:#dbe6ef;background:linear-gradient(135deg,#ffffff 0%,#f7fbfe 100%)}
+.assessment-hero h1{letter-spacing:-.7px;color:#102f4c}
+.assessment-actions .btn{min-height:42px}
+.panel.meta{padding:17px 18px;border-color:#dfe7ee}
+.meta label{font-size:10px;letter-spacing:.2px;color:#647487}
+.meta input,.meta select{height:40px;font-size:12px;color:#172433}
+.meta input:focus,.meta select:focus,.notes:focus{outline:0;border-color:#3c94c5;box-shadow:0 0 0 3px #3c94c51a}
+.assessment-summary>div{position:relative;overflow:hidden}
+.assessment-summary>div:after{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:#2f8fca}
+.assessment-summary>div:nth-child(2):after{background:#159a6b}
+.assessment-summary>div:nth-child(3):after{background:#7459d9}
+.assessment-summary>div:nth-child(4):after{background:#d06b55}
+.table-wrap{margin-top:0;border-radius:12px;overflow:auto}
+#assessmentTable{min-width:1120px}
+#assessmentTable th{height:42px;background:#143f67;font-size:10px;letter-spacing:.1px;padding:8px 6px;position:sticky;top:0;z-index:2}
+#assessmentTable td{height:43px;padding:5px 6px;border-color:#d6dfe7;font-size:11px}
+#assessmentTable tbody tr:hover td{background:#f7fbfe}
+#assessmentTable td.name{font-weight:700;color:#24384a}
+#assessmentTable td:first-child{color:#8a98a5;font-weight:700;width:42px}
+#assessmentTable .mark{width:38px;height:34px;border-radius:9px;transition:.15s;font-weight:800}
+#assessmentTable .mark:hover{transform:scale(1.05);box-shadow:0 4px 12px #173f6820}
+#assessmentTable .mark.yes{border-color:#9ed9bd}
+#assessmentTable .mark.no{border-color:#efb5b0}
+#assessmentTable .average{font-size:10px}
+#assessmentTable .notes{height:34px;min-width:125px;border-radius:8px;padding:7px 9px;font-size:10px}
+.empty-table{height:220px!important;background:#fff!important}
+.empty-table>div{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:#718096}
+.empty-table i{font-size:28px;color:#3b91bf}
+.empty-table strong{font-size:14px;color:#29465f}
+.empty-table span{font-size:11px}
+.rating{padding:14px 17px!important;background:#fbfdff!important}
+.btn{transition:.16s}
+.btn:hover{transform:translateY(-1px)}
+.btn.primary:hover{box-shadow:0 7px 18px #123f6730}
+.class-card{transition:transform .16s,box-shadow .16s}
+.class-card:hover{transform:translateY(-3px)!important;box-shadow:0 16px 35px #173f6812!important}
+@media(max-width:800px){
+ .header-inner{min-height:62px}
+ .assessment-summary{gap:8px}
+ .assessment-summary>div{padding:11px}
+ .panel.meta{padding:14px}
+}
