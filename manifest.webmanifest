@@ -1,0 +1,16 @@
+{
+  "name":"HIS Assessment Hub",
+  "short_name":"HIS Assessment",
+  "description":"Halley International School teacher assessment platform.",
+  "id":"./index.html",
+  "start_url":"./index.html",
+  "scope":"./",
+  "display":"standalone",
+  "orientation":"landscape",
+  "background_color":"#ffffff",
+  "theme_color":"#007a70",
+  "icons":[
+    {"src":"assets/his-logo.png","sizes":"192x192","type":"image/png","purpose":"any"},
+    {"src":"assets/his-logo.png","sizes":"512x512","type":"image/png","purpose":"any"}
+  ]
+}
