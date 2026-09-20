@@ -130,3 +130,31 @@ body.app-body{letter-spacing:.05px}
  .assessment-summary>div{padding:11px}
  .panel.meta{padding:14px}
 }
+
+/* FINAL REPORT — clean school form, balanced like the original paper template */
+.pdf-area{position:absolute!important;left:-15000px!important;top:0!important;width:1120px!important;background:#fff!important}
+.pdf-sheet{width:1120px!important;height:790px!important;box-sizing:border-box!important;padding:18px 24px 10px!important;background:#fff!important;color:#18232d!important;font-family:Arial,Helvetica,sans-serif!important;overflow:hidden!important}
+.school-header{width:100%;background:#173f68;color:#fff;text-align:center;border-radius:0!important}
+.school-name{height:32px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;letter-spacing:.2px}
+.school-line{height:1px;background:#ffffffaa;margin:0 1px}
+.report-name{height:34px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700}
+.info-line{height:34px;display:grid;grid-template-columns:110px 150px 150px 1fr;align-items:center;column-gap:16px;font-size:9px;border-bottom:1px solid #d4dbe1}
+.info-line .teacher{padding-left:10px}
+.scale-line{height:27px;display:flex;align-items:center;gap:17px;font-size:8px;border-bottom:1px solid #cfd7de}
+.scale-line b{color:#173f68;margin-right:2px}
+.pdf-table{width:100%!important;max-width:none!important;margin:7px 0 0!important;border-collapse:collapse!important;table-layout:fixed!important}
+.pdf-table th{height:31px!important;padding:4px 2px!important;background:#173f68!important;color:#fff!important;border:1px solid #8996a2!important;font-size:7.6px!important;font-weight:700!important;line-height:1.05!important;vertical-align:middle!important}
+.pdf-table td{height:29px!important;padding:3px 2px!important;border:1px solid #9ca8b2!important;font-size:8.2px!important;line-height:1!important;text-align:center!important;vertical-align:middle!important}
+.pdf-table tbody tr:nth-child(even) td{background:#edf2f8!important}.pdf-table tbody tr:nth-child(odd) td{background:#fff!important}
+.pdf-table .c-no{font-weight:600;color:#5e6b76}
+.pdf-table .c-name{text-align:left!important;padding-left:7px!important;font-weight:600!important;white-space:nowrap!important}
+.pdf-table .c-mark{font-size:11px!important;font-weight:700!important}
+.pdf-table .mark-yes{color:#18794e!important}.pdf-table .mark-no{color:#b42d28!important}.pdf-table .mark-empty{color:#fff!important}
+.pdf-table .c-average{font-size:7px!important;font-weight:700!important;white-space:nowrap!important}
+.pdf-table .c-average span{display:inline-block;min-width:66px;padding:3px 5px;border-radius:9px}
+.r-excellent span{background:#e3f3e9;color:#18794e}.r-very span{background:#e8f1fa;color:#1e5f8d}.r-good span{background:#fff2d6;color:#8a6100}.r-needs span{background:#fdeceb;color:#ae3029}.r-empty span{background:#f3f5f7;color:#7b8790}
+.pdf-table .c-notes{text-align:left!important;padding-left:6px!important;color:#52616d!important;white-space:nowrap!important}
+.pdf-table tfoot td{height:30px!important;background:#d9ebf6!important;color:#173f68!important;font-weight:700!important;font-size:7.8px!important}
+.pdf-table tfoot td:first-child{text-align:left!important;padding-left:7px!important}
+.w-no{width:4%!important}.w-name{width:16%!important}.w-sub{width:7%!important}.w-average{width:9%!important}.w-notes{width:15%!important}
+.report-footer{height:19px!important;border-top:1px solid #d5dde4!important;margin-top:5px!important;padding:0 2px!important;display:flex!important;align-items:flex-end!important;justify-content:space-between!important;color:#7a8792!important;font-size:6.8px!important}
