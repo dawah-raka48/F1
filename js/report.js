@@ -22,12 +22,33 @@ function showPdf(a){
  requestAnimationFrame(fit);window.addEventListener('resize',fit,{once:false});window.scrollTo(0,0);
 }
 function closePreview(){area.innerHTML='';area.style.cssText='position:absolute;left:-30000px;top:0;width:1122px;background:#fff;display:none'}
+async function deleteAssessment(id){
+  const a=getData().assessments.find(x=>String(x.id)===String(id));
+  if(!a)return;
+  if(!confirm('Delete this assessment? This will also delete all marks for this assessment.'))return;
+  const buttons=[...document.querySelectorAll('[data-delete-assessment="'+id+'"]')];
+  buttons.forEach(b=>setButtonBusy(b,'Deleting...'));
+  try{
+    await deleteRemoteAssessment(id);
+    APP_DATA.assessments=APP_DATA.assessments.filter(x=>String(x.id)!==String(id));
+    d=APP_DATA;
+    renderReports();
+    toast('Deleted successfully');
+  }catch(error){
+    console.error(error);
+    buttons.forEach(restoreButton);
+    toast('Could not delete assessment','error');
+  }
+}
+function renderReports(){
+  list.innerHTML=d.assessments.length?d.assessments.slice().reverse().map(a=>'<div class="report-item"><div><strong>'+esc(a.className)+' — Week '+esc(a.week)+'</strong><small>'+esc(a.teacher)+' · '+esc(a.from||'')+'</small></div><div><button class="btn ghost" onclick="showPdf(getData().assessments.find(x=>x.id=='+a.id+'))"><i class="fa-solid fa-eye"></i> Preview</button> <button class="btn primary" onclick="downloadPdf(getData().assessments.find(x=>x.id=='+a.id+'))"><i class="fa-solid fa-file-pdf"></i> PDF</button> <button class="btn danger" data-delete-assessment="'+a.id+'" onclick="deleteAssessment('+a.id+')"><i class="fa-solid fa-trash"></i> Delete</button></div></div>').join(''):'<div class="empty-state"><div><i class="fa-solid fa-file-circle-plus"></i></div><h3>No saved assessments yet</h3><p>Complete an assessment first, then return here to export it.</p></div>';
+}
 async function downloadPdf(a){if(!a)return;showPdf(a);const el=document.getElementById('sheet');await html2pdf().set({margin:0,filename:'HIS_'+a.className+'_Week_'+a.week+'.pdf',image:{type:'jpeg',quality:1},html2canvas:{scale:4,useCORS:true,backgroundColor:'#fff',logging:false,letterRendering:true},pagebreak:{mode:['avoid-all']},jsPDF:{unit:'mm',format:'a4',orientation:'landscape',compress:true}}).from(el).save();area.style.position='absolute'}
 async function initReports(){
  try{
    d=await window.hisReady;
    list=document.getElementById('reports');area=document.getElementById('pdfArea');
-   list.innerHTML=d.assessments.length?d.assessments.slice().reverse().map(a=>'<div class="report-item"><div><strong>'+esc(a.className)+' — Week '+esc(a.week)+'</strong><small>'+esc(a.teacher)+' · '+esc(a.from||'')+'</small></div><div><button class="btn ghost" onclick="showPdf(getData().assessments.find(x=>x.id=='+a.id+'))"><i class="fa-solid fa-eye"></i> Preview</button> <button class="btn primary" onclick="downloadPdf(getData().assessments.find(x=>x.id=='+a.id+'))"><i class="fa-solid fa-file-pdf"></i> PDF</button></div></div>').join(''):'<div class="empty-state"><div><i class="fa-solid fa-file-circle-plus"></i></div><h3>No saved assessments yet</h3><p>Complete an assessment first, then return here to export it.</p></div>';
+   renderReports();
  }catch(error){console.error(error);document.getElementById('reports').innerHTML='<div class="empty-state"><h3>Google Sheets connection failed</h3><p>Please check the Apps Script deployment.</p></div>'}
 }
 initReports();
