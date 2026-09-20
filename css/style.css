@@ -251,3 +251,7 @@ body.app-body{letter-spacing:.05px}
 .pdf-brand-image{width:100%;height:74px;display:flex;align-items:center;justify-content:center;background:#fff;overflow:hidden}
 .pdf-brand-image img{display:block;width:100%;height:100%;object-fit:contain;object-position:center}
 @media(max-width:900px){.app-school-header{width:155px;height:32px}}
+
+/* HIS HEADER IMAGE — preserve the original full logo strip */
+.pdf-brand-image{width:100%!important;height:92px!important;display:flex!important;align-items:center!important;justify-content:center!important;background:#fff!important;overflow:hidden!important;padding:0!important}
+.pdf-brand-image img{display:block!important;width:100%!important;height:auto!important;max-height:92px!important;object-fit:contain!important;object-position:center!important}
