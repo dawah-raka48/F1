@@ -724,3 +724,34 @@ body.app-body{letter-spacing:.05px}
   padding:0!important;
   border:0!important;
 }
+
+
+/* FINAL HIS BANNER — enlarge source artwork without distortion */
+.school-head.official-his-head{
+  width:100%!important;
+  height:92px!important;
+  min-height:92px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  background:#fff!important;
+  border:0!important;
+  padding:0!important;
+  margin:0 0 4px!important;
+  overflow:hidden!important;
+  line-height:0!important;
+}
+.school-head.official-his-head .official-his-image{
+  display:block!important;
+  width:100%!important;
+  height:auto!important;
+  max-width:none!important;
+  max-height:none!important;
+  object-fit:contain!important;
+  object-position:center center!important;
+  transform:scale(3.15)!important;
+  transform-origin:center center!important;
+  margin:0 auto!important;
+  padding:0!important;
+  border:0!important;
+}
