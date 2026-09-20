@@ -649,3 +649,48 @@ body.app-body{letter-spacing:.05px}
 .report-bottom>div:nth-child(3){justify-content:flex-end!important}
 .report-bottom span{display:inline-block!important;width:95px!important;border-bottom:1px solid #8ca6ae!important;height:12px!important}
 .report-bottom small{font-size:6px!important}
+
+
+/* FINAL PDF POLISH — compact full-width header + use remaining page for report */
+.school-head.official-his-head{
+  width:100%!important;
+  height:82px!important;
+  min-height:82px!important;
+  display:block!important;
+  background:#fff!important;
+  border:0!important;
+  padding:0!important;
+  margin:0 0 4px!important;
+  overflow:hidden!important;
+  line-height:0!important;
+}
+.school-head.official-his-head .official-his-image{
+  display:block!important;
+  width:100%!important;
+  height:82px!important;
+  max-width:100%!important;
+  max-height:none!important;
+  object-fit:fill!important;
+  object-position:center!important;
+  transform:none!important;
+  margin:0!important;
+  padding:0!important;
+  border:0!important;
+}
+.pdf-sheet{
+  padding:7px 16px 6px!important;
+}
+.report-title{
+  height:36px!important;
+  margin:0 0 5px!important;
+}
+.info-grid{margin-bottom:5px!important}
+.info-grid>div{height:30px!important}
+.scale-box{height:22px!important;margin-bottom:5px!important}
+.pdf-table th{height:27px!important}
+.pdf-table td{height:27px!important}
+.pdf-table tfoot td{height:27px!important}
+.report-bottom{
+  height:34px!important;
+  margin-top:5px!important;
+}
