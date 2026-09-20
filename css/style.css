@@ -494,3 +494,30 @@ body.app-body{letter-spacing:.05px}
   padding:0!important;
   border:0!important;
 }
+
+/* FINAL PDF HEADER — exact HIS header asset */
+.school-head.official-his-head{
+  width:100%!important;
+  height:auto!important;
+  min-height:0!important;
+  display:block!important;
+  background:#fff!important;
+  border:0!important;
+  padding:0!important;
+  margin:0 0 3px!important;
+  overflow:visible!important;
+  line-height:0!important;
+}
+.school-head.official-his-head .official-his-image{
+  display:block!important;
+  width:100%!important;
+  height:auto!important;
+  max-width:100%!important;
+  max-height:none!important;
+  object-fit:contain!important;
+  object-position:center!important;
+  transform:none!important;
+  margin:0!important;
+  padding:0!important;
+  border:0!important;
+}
