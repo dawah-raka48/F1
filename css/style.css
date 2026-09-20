@@ -18,3 +18,21 @@
 .w-no{width:34px}.w-name{width:145px}.w-sub{width:67px}.w-average{width:94px}.w-notes{width:118px}
 .report-footer{height:22px;margin-top:7px;border-top:1px solid #d7e0e7;color:#667482;display:flex;justify-content:space-between;align-items:flex-end;font-size:7px}
 @media print{.topbar,.container>section:not(.pdf-area){display:none}.pdf-area{position:static!important;left:auto!important}.pdf-sheet{box-shadow:none}}
+
+/* Final PDF print layout: fixed A4 landscape canvas, no horizontal clipping */
+.pdf-sheet{width:1122px!important;height:794px!important;min-height:794px!important;max-height:794px!important;box-sizing:border-box!important;padding:16px 18px 10px!important;overflow:hidden!important;background:#fff!important}
+.report-header{height:58px!important}
+.report-title{height:40px!important}
+.meta-grid{margin:7px 0 5px!important}
+.meta-box{height:34px!important;padding:5px 8px!important}
+.scale-row{height:24px!important;margin-bottom:5px!important}
+.pdf-table{width:100%!important;max-width:100%!important;table-layout:fixed!important;border-spacing:0!important}
+.pdf-table th{height:27px!important;padding:4px 2px!important;font-size:7.5px!important}
+.pdf-table td{height:27px!important;padding:2px!important;font-size:7.5px!important}
+.pdf-table .c-name{font-size:7.8px!important}
+.pdf-table .c-mark{font-size:10px!important}
+.pdf-table .c-average{font-size:6.8px!important}
+.pdf-table .c-average span{min-width:60px!important;padding:2px 3px!important}
+.pdf-table .c-notes{font-size:7px!important}
+.w-no{width:31px!important}.w-name{width:138px!important}.w-sub{width:65px!important}.w-average{width:88px!important}.w-notes{width:105px!important}
+.report-footer{height:18px!important;margin-top:4px!important;font-size:6.5px!important}
