@@ -34,10 +34,33 @@ async function apiPost(action,payload={}){
   return {success:true};
 }
 
+function canonicalData(d){
+  return {
+    classes:(d.classes||[]).map(c=>({
+      id:String(c.id||''),
+      name:String(c.name||''),
+      students:(c.students||[]).map(String)
+    })),
+    assessments:(d.assessments||[]).map(a=>({
+      id:String(a.id||''),
+      classId:String(a.classId||''),
+      className:String(a.className||''),
+      week:String(a.week||''),
+      from:String(a.from||''),
+      to:String(a.to||''),
+      teacher:String(a.teacher||''),
+      rows:(a.rows||[]).map(r=>({
+        name:String(r.name||''),
+        marks:Array.isArray(r.marks)?r.marks.map(x=>x===true?true:x===false?false:null):[],
+        average:String(r.average||''),
+        notes:String(r.notes||'')
+      }))
+    }))
+  };
+}
 function dataMatches(target,remote){
-  try{
-    return JSON.stringify(target)===JSON.stringify(remote);
-  }catch(e){return false}
+  try{return JSON.stringify(canonicalData(target))===JSON.stringify(canonicalData(remote))}
+  catch(e){return false}
 }
 
 async function saveRemoteData(data){
