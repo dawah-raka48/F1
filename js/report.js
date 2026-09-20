@@ -5,12 +5,12 @@ function build(a){
  const body=a.rows.map((r,i)=>'<tr><td class="c-no">'+(i+1)+'</td><td class="c-name">'+esc(r.name)+'</td>'+r.marks.map(x=>'<td class="c-mark '+(x===true?'mark-yes':x===false?'mark-no':'mark-empty')+'">'+(x===true?'✓':x===false?'✗':'—')+'</td>').join('')+'<td class="c-average '+ratingClass(r.average)+'"><span>'+esc(r.average||'—')+'</span></td><td class="c-notes">'+esc(r.notes||'')+'</td></tr>').join('');
  const averages=subjects.map((_,j)=>{const n=a.rows.reduce((s,r)=>s+(r.marks[j]===true?1:0),0);return Math.round(n/a.rows.length*100)+'%'}).map(x=>'<td>'+x+'</td>').join('');
  return '<div class="pdf-sheet" id="sheet">'+
- '<div class="school-header"><div class="crest">HIS</div><div class="school-copy"><div class="school-name">HALLEY INTERNATIONAL SCHOOL</div><div class="school-sub">INSPIRE • LEARN • ACHIEVE</div></div><div class="school-side">WEEKLY<br><b>ASSESSMENT</b></div></div>'+
- '<div class="title-bar"><span>Weekly Student Assessment</span><strong>— '+esc(a.className)+'</strong></div>'+
- '<div class="info-grid"><div><label>WEEK</label><b>'+esc(a.week||'—')+'</b></div><div><label>FROM</label><b>'+esc(a.from||'—')+'</b></div><div><label>TO</label><b>'+esc(a.to||'—')+'</b></div><div><label>TEACHER NAME</label><b>'+esc(a.teacher||'—')+'</b></div></div>'+
- '<div class="scale-box"><strong>RATING SCALE</strong><span><b>5</b> Excellent</span><span><b>4</b> Very Good</span><span><b>3</b> Good</span><span><b>2</b> Fair</span><span><b>1</b> Needs Improvement</span></div>'+
+ '<div class="school-head"><div class="school-crest">HIS</div><div class="school-brand"><div class="school-name">HALLEY INTERNATIONAL SCHOOL</div><div class="school-sub">INSPIRE • LEARN • ACHIEVE</div></div><div class="school-motto">A BRIGHTER<br>TOMORROW<br>TOGETHER</div></div>'+
+ '<div class="report-title">Weekly Student Assessment <strong>– '+esc(a.className)+'</strong></div>'+
+ '<div class="info-grid"><div><label>WEEK</label><b>'+esc(a.week||'—')+'</b></div><div><label>FROM</label><b>'+esc(a.from||'—')+'</b></div><div><label>TO</label><b>'+esc(a.to||'—')+'</b></div><div class="teacher"><label>TEACHER NAME</label><b>'+esc(a.teacher||'—')+'</b></div></div>'+
+ '<div class="scale-box"><strong>RATING SCALE</strong><span><b>5</b> = Excellent</span><span><b>4</b> = Very Good</span><span><b>3</b> = Good</span><span><b>2</b> = Fair</span><span><b>1</b> = Needs Improvement</span></div>'+
  '<table class="pdf-table"><colgroup><col class="w-no"><col class="w-name">'+subjects.map(()=>'<col class="w-sub">').join('')+'<col class="w-average"><col class="w-notes"></colgroup><thead><tr><th>No.</th><th>Student Name</th>'+subjects.map(s=>'<th>'+s+'</th>').join('')+'<th>Average</th><th>Notes</th></tr></thead><tbody>'+body+'</tbody><tfoot><tr><td colspan="2">Class Average</td>'+averages+'<td></td><td></td></tr></tfoot></table>'+
- '<div class="signature-row"><div>Teacher Signature <span></span></div><div>Halley International School – HIS<br><small>Weekly Student Assessment</small></div><div>Date <span></span></div></div>'+
+ '<div class="signature-row"><div>Teacher Signature <span></span></div><div><b>Halley International School – HIS</b><small>Weekly Student Assessment</small></div><div>Date <span></span></div></div>'+
  '</div>';
 }
 function showPdf(a){area.innerHTML=build(a);area.style.position='static';window.scrollTo(0,0)}
