@@ -13,6 +13,13 @@ function build(a){
  '<div class="signature-row"><div>Teacher Signature <span></span></div><div><b>Halley International School – HIS</b><small>Weekly Student Assessment</small></div><div>Date <span></span></div></div>'+
  '</div>';
 }
-function showPdf(a){area.innerHTML=build(a);area.style.position='static';window.scrollTo(0,0)}
+function showPdf(a){
+ area.innerHTML='<div class="preview-overlay"><div class="preview-toolbar"><div><strong>Report Preview</strong><span>'+esc(a.className)+' · Week '+esc(a.week||'')+'</span></div><div class="preview-tools"><button class="btn ghost" onclick="closePreview()"><i class="fa-solid fa-xmark"></i> Close</button><button class="btn primary" onclick="downloadPdf(getData().assessments.find(x=>x.id=='+a.id+'))"><i class="fa-solid fa-file-pdf"></i> Download PDF</button></div></div><div class="preview-viewport"><div class="preview-stage">'+build(a)+'</div></div></div>';
+ area.style.position='fixed';area.style.left='0';area.style.top='0';area.style.width='100%';area.style.height='100%';area.style.zIndex='9999';area.style.display='block';area.style.background='#17212b';
+ const sheet=area.querySelector('.pdf-sheet'),stage=area.querySelector('.preview-stage'),viewport=area.querySelector('.preview-viewport');
+ const fit=()=>{const maxW=Math.min(1122,viewport.clientWidth-48),scale=maxW/1122;sheet.style.transform='scale('+scale+')';sheet.style.transformOrigin='top center';stage.style.width=(1122*scale)+'px';stage.style.height=(794*scale)+'px'};
+ requestAnimationFrame(fit);window.addEventListener('resize',fit,{once:false});window.scrollTo(0,0);
+}
+function closePreview(){area.innerHTML='';area.style.cssText='position:absolute;left:-30000px;top:0;width:1122px;background:#fff;display:none'}
 list.innerHTML=d.assessments.length?d.assessments.slice().reverse().map(a=>'<div class="report-item"><div><strong>'+esc(a.className)+' — Week '+esc(a.week)+'</strong><small>'+esc(a.teacher)+' · '+esc(a.from||'')+'</small></div><div><button class="btn ghost" onclick="showPdf(getData().assessments.find(x=>x.id=='+a.id+'))"><i class="fa-solid fa-eye"></i> Preview</button> <button class="btn primary" onclick="downloadPdf(getData().assessments.find(x=>x.id=='+a.id+'))"><i class="fa-solid fa-file-pdf"></i> PDF</button></div></div>').join(''):'<div class="empty-state"><div><i class="fa-solid fa-file-circle-plus"></i></div><h3>No saved assessments yet</h3><p>Complete an assessment first, then return here to export it.</p></div>';
 async function downloadPdf(a){showPdf(a);const el=document.getElementById('sheet');await html2pdf().set({margin:0,filename:'HIS_'+a.className+'_Week_'+a.week+'.pdf',image:{type:'jpeg',quality:1},html2canvas:{scale:4,useCORS:true,backgroundColor:'#fff',logging:false,letterRendering:true},pagebreak:{mode:['avoid-all']},jsPDF:{unit:'mm',format:'a4',orientation:'landscape',compress:true}}).from(el).save();area.style.position='absolute'}
