@@ -260,3 +260,41 @@ body.app-body{letter-spacing:.05px}
 .pdf-brand-image{width:100%!important;height:78px!important;display:flex!important;align-items:center!important;justify-content:center!important;background:#fff!important;overflow:hidden!important;border-top:0!important;padding:0!important}
 .pdf-brand-image img{display:block!important;width:100%!important;height:auto!important;max-height:78px!important;object-fit:contain!important;object-position:center center!important;margin:0!important;padding:0!important;border:0!important}
 .app-school-header{width:240px!important;height:auto!important;max-height:46px!important;object-fit:contain!important;object-position:center!important}
+
+/* ===== OFFICIAL HIS REPORT — reference-style layout ===== */
+.pdf-area{position:absolute!important;left:-30000px!important;top:0!important;width:1122px!important;background:#fff!important}
+.pdf-sheet{width:1122px!important;height:794px!important;box-sizing:border-box!important;padding:10px 16px 8px!important;background:#fff!important;color:#123a52!important;font-family:Arial,Helvetica,sans-serif!important;overflow:hidden!important}
+.pdf-brand-image{height:76px!important;width:100%!important;display:flex!important;align-items:center!important;justify-content:center!important;background:#fff!important;overflow:hidden!important;padding:0!important;margin:0!important}
+.pdf-brand-image img{display:block!important;width:100%!important;height:auto!important;max-height:76px!important;object-fit:contain!important;object-position:center!important;margin:0!important}
+.report-title{height:43px!important;background:#007a70!important;color:#fff!important;border-radius:7px!important;display:flex!important;align-items:center!important;justify-content:center!important;font-family:Georgia,serif!important;font-size:17px!important;font-weight:700!important;margin:3px 0 8px!important}
+.report-title strong{font-size:17px!important;margin-left:8px!important}
+.info-grid{display:grid!important;grid-template-columns:1fr 1.25fr 1.25fr 2.15fr!important;gap:8px!important;margin:0 0 7px!important}
+.info-grid>div{height:36px!important;box-sizing:border-box!important;border:1px solid #b8ced8!important;border-radius:6px!important;background:#f7fbfc!important;padding:5px 10px!important;display:flex!important;align-items:center!important;gap:12px!important}
+.info-grid label{font-size:7px!important;letter-spacing:.8px!important;color:#426477!important}
+.info-grid b{font-size:9.5px!important;color:#123a52!important}
+.scale-box{height:27px!important;box-sizing:border-box!important;border-radius:6px!important;background:#dff1ee!important;color:#123a52!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:20px!important;font-size:7.7px!important;margin:0 0 7px!important}
+.scale-box strong{font-size:8.5px!important}
+.pdf-table{width:100%!important;margin:0!important;table-layout:fixed!important;border-collapse:collapse!important}
+.pdf-table th{height:31px!important;padding:4px 2px!important;background:#007a70!important;color:#fff!important;border:1px solid #91b2b5!important;font-size:7.7px!important;font-weight:700!important;line-height:1.05!important}
+.pdf-table td{height:29px!important;padding:3px 2px!important;border:1px solid #a8c3c9!important;font-size:8.4px!important;text-align:center!important;vertical-align:middle!important}
+.pdf-table tbody tr:nth-child(even) td{background:#edf7f6!important}
+.pdf-table tbody tr:nth-child(odd) td{background:#fff!important}
+.c-no{color:#627b87!important;font-weight:600!important}
+.c-name{text-align:left!important;padding-left:8px!important;font-weight:600!important;white-space:nowrap!important}
+.c-mark{font-size:11px!important;font-weight:800!important}
+.mark-yes{color:#149b56!important}.mark-no{color:#d63d35!important}.mark-empty{color:#9baab0!important}
+.c-average{font-size:7px!important;font-weight:700!important;white-space:nowrap!important}
+.c-average span{display:inline-block!important;min-width:70px!important;padding:3px 5px!important;border-radius:10px!important}
+.r-excellent span{background:#e1f4e9!important;color:#147c49!important}
+.r-very span{background:#dceef8!important;color:#175f8d!important}
+.r-good span{background:#fff0c7!important;color:#7f5c00!important}
+.r-needs span{background:#fde3e1!important;color:#b52f29!important}
+.r-empty span{background:#f0f3f4!important;color:#7a878d!important}
+.c-notes{text-align:left!important;padding-left:6px!important;color:#617783!important}
+.pdf-table tfoot td{height:30px!important;background:#d9efed!important;color:#123f54!important;font-weight:800!important;font-size:8px!important}
+.pdf-table tfoot td:first-child{text-align:left!important;padding-left:9px!important}
+.w-no{width:4%!important}.w-name{width:16%!important}.w-sub{width:7%!important}.w-average{width:10%!important}.w-notes{width:14%!important}
+.signature-row{width:100%!important;height:33px!important;margin:5px 0 0!important;border-top:1px solid #d6e2e5!important;display:grid!important;grid-template-columns:1fr 1fr 1fr!important;align-items:end!important;color:#536d79!important;font-size:7px!important}
+.signature-row>div:nth-child(2){text-align:center!important;color:#123f54!important}
+.signature-row small{display:block!important;font-size:6px!important;margin-top:2px!important}
+.signature-row span{display:inline-block!important;width:105px!important;border-bottom:1px solid #8ca6ae!important;margin-left:5px!important;transform:translateY(-2px)!important}
