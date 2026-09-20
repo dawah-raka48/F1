@@ -158,3 +158,23 @@ body.app-body{letter-spacing:.05px}
 .pdf-table tfoot td:first-child{text-align:left!important;padding-left:7px!important}
 .w-no{width:4%!important}.w-name{width:16%!important}.w-sub{width:7%!important}.w-average{width:9%!important}.w-notes{width:15%!important}
 .report-footer{height:19px!important;border-top:1px solid #d5dde4!important;margin-top:5px!important;padding:0 2px!important;display:flex!important;align-items:flex-end!important;justify-content:space-between!important;color:#7a8792!important;font-size:6.8px!important}
+
+/* FINAL HIGH-QUALITY REPORT — centered, print-first */
+.pdf-area{position:absolute!important;left:-20000px!important;top:0!important;width:1200px!important;background:#fff!important}
+.pdf-sheet{width:1200px!important;height:848px!important;box-sizing:border-box!important;padding:18px 28px 12px!important;background:#fff!important;color:#13283b!important;font-family:Arial,Helvetica,sans-serif!important;overflow:hidden!important}
+.school-top{height:72px;background:#fff;display:flex;align-items:center;padding:0 20px;border-top:3px solid #173f68}
+.logo-mark{width:48px;height:48px;border-radius:50%;border:2px solid #173f68;color:#173f68;display:grid;place-items:center;font-weight:800;font-size:13px;letter-spacing:1px;margin-right:13px}
+.school-copy{flex:1}.school-name{font-size:19px;font-weight:800;letter-spacing:.6px;color:#173f68}.school-tag{font-size:8px;letter-spacing:4px;color:#173f68;margin-top:5px}.school-motto{text-align:right;border-left:1px solid #b8c9d6;padding-left:20px;color:#173f68;font-size:7px;letter-spacing:2px;line-height:1.5}
+.report-title{height:44px;border-radius:8px;background:#173f68;color:#fff;display:flex;align-items:center;justify-content:center;gap:8px;font-size:17px;font-weight:700;margin:0 0 10px}.report-title strong{font-size:17px}
+.info-grid{display:grid;grid-template-columns:1fr 1fr 1fr 2fr;gap:9px;margin-bottom:8px}.info-grid>div{height:36px;border:1px solid #c8d9e6;border-radius:6px;background:#f7fbfe;padding:6px 10px;display:flex;align-items:center;gap:12px}.info-grid label{font-size:7px;letter-spacing:1px;color:#687b8c;margin:0}.info-grid b{font-size:10px;color:#173f68}
+.scale-row{height:28px;border-radius:6px;background:#e8f4fc;color:#173f68;display:flex;align-items:center;justify-content:center;gap:21px;font-size:8px;margin-bottom:8px}.scale-row strong{font-size:9px}.scale-row b{font-size:9px}
+.pdf-table{width:96%!important;margin:0 auto!important;table-layout:fixed!important;border-collapse:collapse!important}
+.pdf-table th{height:32px!important;padding:5px 2px!important;background:#173f68!important;color:#fff!important;border:1px solid #8295a5!important;font-size:8px!important;font-weight:700!important;line-height:1.05!important}
+.pdf-table td{height:30px!important;padding:3px 2px!important;border:1px solid #aebdca!important;font-size:8.5px!important;text-align:center!important;vertical-align:middle!important}
+.pdf-table tbody tr:nth-child(even) td{background:#edf5fb!important}.pdf-table tbody tr:nth-child(odd) td{background:#fff!important}
+.c-name{text-align:left!important;padding-left:8px!important;font-weight:600!important;white-space:nowrap!important}.c-no{color:#5c6d7b;font-weight:600}.c-mark{font-size:12px!important;font-weight:800!important}.mark-yes{color:#159653!important}.mark-no{color:#dc3933!important}.mark-empty{color:#9aa8b3!important}
+.c-average{font-size:7px!important;font-weight:700!important;white-space:nowrap!important}.c-average span{display:inline-block;min-width:72px;padding:4px 6px;border-radius:12px}.r-excellent span{background:#dff4e8;color:#12814b}.r-very span{background:#dceefa;color:#175e8d}.r-good span{background:#fff0c9;color:#876000}.r-needs span{background:#fde1df;color:#b72f2a}.r-empty span{background:#f1f4f6;color:#76838d}
+.c-notes{text-align:left!important;color:#627180!important}
+.pdf-table tfoot td{height:32px!important;background:#dceefa!important;color:#173f68!important;font-weight:800!important;font-size:8px!important}.pdf-table tfoot td:first-child{text-align:left!important;padding-left:10px!important}
+.w-no{width:4%!important}.w-name{width:16%!important}.w-sub{width:7%!important}.w-average{width:10%!important}.w-notes{width:14%!important}
+.signature-row{width:96%;margin:9px auto 0;height:38px;border-top:1px solid #d8e2e9;display:grid;grid-template-columns:1fr 1fr 1fr;align-items:end;color:#536575;font-size:7.5px}.signature-row>div:nth-child(2){text-align:center;color:#173f68;font-weight:700}.signature-row small{font-weight:400;font-size:6.5px}.signature-row span{display:inline-block;width:110px;border-bottom:1px solid #9aabb8;margin-left:5px;transform:translateY(-2px)}
