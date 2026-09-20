@@ -303,3 +303,30 @@ body.app-body{letter-spacing:.05px}
 .school-head.official-his-head{height:76px!important;width:100%!important;display:flex!important;align-items:center!important;justify-content:center!important;background:#fff!important;border-top:0!important;border-bottom:1px solid #d6e0e5!important;padding:0!important;margin:0!important;overflow:hidden!important}
 .school-head.official-his-head .official-his-image{display:block!important;width:100%!important;height:auto!important;max-height:76px!important;object-fit:contain!important;object-position:center!important;margin:0!important;padding:0!important;border:0!important}
 .school-head.official-his-head .brand-logo,.school-head.official-his-head .school-brand,.school-head.official-his-head .school-center,.school-head.official-his-head .school-motto{display:none!important}
+
+/* HIS HEADER — increase visible height for print */
+.school-head.official-his-head{
+  height:92px!important;
+  min-height:92px!important;
+  width:100%!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  background:#fff!important;
+  border:0!important;
+  padding:0!important;
+  margin:0 0 2px!important;
+  overflow:hidden!important;
+}
+.school-head.official-his-head .official-his-image{
+  display:block!important;
+  width:auto!important;
+  height:86px!important;
+  max-width:100%!important;
+  max-height:86px!important;
+  object-fit:contain!important;
+  object-position:center!important;
+  margin:0 auto!important;
+  padding:0!important;
+  border:0!important;
+}
