@@ -418,3 +418,21 @@ body.app-body{letter-spacing:.05px}
     max-height:40px!important;
   }
 }
+
+
+/* FINAL TRANSPARENT HIS LOGO */
+.app-school-header{
+  width:52px!important;
+  height:52px!important;
+  max-width:52px!important;
+  max-height:52px!important;
+  object-fit:contain!important;
+  object-position:center!important;
+  background:transparent!important;
+  padding:0!important;
+  border:0!important;
+  border-radius:0!important;
+}
+@media(max-width:900px){
+  .app-school-header{width:46px!important;height:46px!important;max-width:46px!important;max-height:46px!important}
+}
