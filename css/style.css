@@ -40,3 +40,8 @@
 /* Center the report table and keep it comfortably contained on the A4 page */
 .pdf-table{width:96%!important;max-width:96%!important;margin:0 auto!important}
 .report-footer{width:96%!important;margin-left:auto!important;margin-right:auto!important}
+
+/* Final containment: the table stays inside the report frame with equal safe margins */
+.pdf-sheet{padding-left:26px!important;padding-right:26px!important}
+.pdf-table{width:92%!important;max-width:92%!important;margin-left:auto!important;margin-right:auto!important}
+.report-footer{width:92%!important;margin-left:auto!important;margin-right:auto!important}
