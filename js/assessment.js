@@ -50,10 +50,10 @@ async function initAssessment(){
  }catch(error){console.error(error);toast('Could not load Google Sheets data','error')}
 }
 select.onchange=()=>{history.replaceState(null,'','?class='+encodeURIComponent(select.value));data=getData();render()};
-document.getElementById('saveBtn').onclick=async()=>{
- if(!current||!current.students.length){toast('Add students before saving the assessment','error');return}
+document.getElementById('saveBtn').onclick=async()=>{const saveBtn=document.getElementById('saveBtn');if(saveBtn.disabled)return;
+ if(!current||!current.students.length){toast('Add students before saving the assessment','error');return}setButtonBusy(saveBtn,'Saving...');
  const assessment={id:Date.now(),classId:current.id,className:current.name,week:document.getElementById('week').value,from:document.getElementById('from').value,to:document.getElementById('to').value,teacher:document.getElementById('teacher').value,rows:[...table.querySelectorAll('tr[data-student]')].map(tr=>({name:tr.dataset.student,marks:[...tr.querySelectorAll('.mark')].map(x=>x.dataset.state==='yes'?true:x.dataset.state==='no'?false:null),average:tr.querySelector('.average').textContent,notes:tr.querySelector('.notes').value}))};
  data=getData();data.assessments=data.assessments.filter(x=>!(x.classId===assessment.classId&&x.week===assessment.week));data.assessments.push(assessment);
- try{await saveData(data);toast('Assessment saved to Google Sheets');setTimeout(()=>location.href='report.html',500)}catch(error){}
+ try{await saveData(data);toast('Saved successfully');setTimeout(()=>location.href='report.html',700)}catch(error){restoreButton(saveBtn)}
 };
 initAssessment();
