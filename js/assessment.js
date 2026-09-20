@@ -1,19 +1,6 @@
 const subjects=['Reading','Grammar','Dictation','Phonics','Writing','Homework','Classwork','Commitment'];
-let data=getData(),params=new URLSearchParams(location.search),classId=params.get('class')||'1A';
-let current=data.classes.find(c=>c.id===classId)||data.classes[0];
+let data,current,params,classId;
 const table=document.querySelector('#assessmentTable tbody'),select=document.getElementById('classSelect');
-
-if(!current){
-  data.classes=[{id:'1A',name:'Class 1A',students:['Fayrouz','Zeina','Dana','Mehar','Mena','Malak','Karma','Hafsa','Halima','Hala Mohammed','Hala Jalal','Cady','Celia','Zenib','Rella']}];
-  saveData(data);current=data.classes[0];
-}
-if(current.id==='1A' && current.students.length===0 && data.assessments.length===0){
-  current.students=['Fayrouz','Zeina','Dana','Mehar','Mena','Malak','Karma','Hafsa','Halima','Hala Mohammed','Hala Jalal','Cady','Celia','Zenib','Rella'];
-  saveData(data);
-}
-
-select.innerHTML=data.classes.map(c=>'<option value="'+esc(c.id)+'">'+esc(c.name)+'</option>').join('');
-select.value=current.id;
 
 function rating(score){
  if(score>=.875)return'Excellent';
@@ -23,6 +10,7 @@ function rating(score){
 }
 function render(){
  current=data.classes.find(c=>c.id===select.value)||data.classes[0];
+ if(!current)return;
  document.getElementById('classTitle').textContent=current.name;
  if(!current.students.length){
    table.innerHTML='<tr><td colspan="12" class="empty-table"><div><i class="fa-solid fa-user-plus"></i><strong>No students in this class</strong><span>Add students using the Students button above.</span></div></td></tr>';
@@ -49,10 +37,23 @@ function updateSummary(){
  document.getElementById('veryGoodTotal').textContent=vg;
  document.getElementById('needsTotal').textContent=needs;
 }
+async function initAssessment(){
+ try{
+   data=await window.hisReady;
+   params=new URLSearchParams(location.search);
+   classId=params.get('class')||'1A';
+   current=data.classes.find(c=>c.id===classId)||data.classes[0];
+   if(!current){toast('No classes found in Google Sheets','error');return}
+   select.innerHTML=data.classes.map(c=>'<option value="'+esc(c.id)+'">'+esc(c.name)+'</option>').join('');
+   select.value=current.id;
+   render();
+ }catch(error){console.error(error);toast('Could not load Google Sheets data','error')}
+}
 select.onchange=()=>{history.replaceState(null,'','?class='+encodeURIComponent(select.value));data=getData();render()};
-document.getElementById('saveBtn').onclick=()=>{
- if(!current.students.length){toast('Add students before saving the assessment','error');return}
+document.getElementById('saveBtn').onclick=async()=>{
+ if(!current||!current.students.length){toast('Add students before saving the assessment','error');return}
  const assessment={id:Date.now(),classId:current.id,className:current.name,week:document.getElementById('week').value,from:document.getElementById('from').value,to:document.getElementById('to').value,teacher:document.getElementById('teacher').value,rows:[...table.querySelectorAll('tr[data-student]')].map(tr=>({name:tr.dataset.student,marks:[...tr.querySelectorAll('.mark')].map(x=>x.dataset.state==='yes'?true:x.dataset.state==='no'?false:null),average:tr.querySelector('.average').textContent,notes:tr.querySelector('.notes').value}))};
- data=getData();data.assessments=data.assessments.filter(x=>!(x.classId===assessment.classId&&x.week===assessment.week));data.assessments.push(assessment);saveData(data);toast('Assessment saved successfully');setTimeout(()=>location.href='report.html',500)
+ data=getData();data.assessments=data.assessments.filter(x=>!(x.classId===assessment.classId&&x.week===assessment.week));data.assessments.push(assessment);
+ try{await saveData(data);toast('Assessment saved to Google Sheets');setTimeout(()=>location.href='report.html',500)}catch(error){}
 };
-render();
+initAssessment();
