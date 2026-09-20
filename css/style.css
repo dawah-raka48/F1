@@ -45,3 +45,31 @@
 .pdf-sheet{padding-left:26px!important;padding-right:26px!important}
 .pdf-table{width:92%!important;max-width:92%!important;margin-left:auto!important;margin-right:auto!important}
 .report-footer{width:92%!important;margin-left:auto!important;margin-right:auto!important}
+/* FINAL PDF LAYOUT — balanced A4 landscape */
+.pdf-area{position:absolute!important;left:-15000px!important;top:0!important;width:1120px!important;background:#fff!important}
+.pdf-sheet{width:1120px!important;height:790px!important;min-height:790px!important;padding:16px 28px 12px!important;background:#fff!important;color:#17212b!important;font-family:Arial,sans-serif!important}
+.report-header{height:66px!important;padding:9px 16px!important;border-radius:6px 6px 0 0!important}
+.school-mark{width:44px!important;height:44px!important;font-size:12px!important}
+.school-name{font-size:15px!important}
+.school-sub{font-size:7.5px!important}
+.report-badge{font-size:7px!important}
+.report-title{height:42px!important;padding:0 16px!important;font-size:13px!important}
+.report-title strong{font-size:14px!important}
+.meta-grid{grid-template-columns:100px 145px 145px 1fr!important;gap:8px!important;margin:8px 0 6px!important}
+.meta-box{height:36px!important;padding:6px 9px!important}
+.scale-row{height:25px!important;margin-bottom:6px!important;padding:0 9px!important;gap:15px!important}
+.pdf-table{width:1064px!important;height:auto!important;table-layout:fixed!important;border-collapse:collapse!important}
+.pdf-table th{height:30px!important;padding:4px 2px!important;font-size:7.6px!important;line-height:1.05!important}
+.pdf-table td{height:28px!important;padding:3px 2px!important;font-size:8.2px!important;line-height:1!important}
+.pdf-table .c-name{padding-left:7px!important;font-size:8.3px!important}
+.pdf-table .c-mark{font-size:10.5px!important}
+.pdf-table .c-average{font-size:7px!important}
+.pdf-table .c-average span{min-width:68px!important;padding:3px 4px!important}
+.pdf-table .c-notes{font-size:7.8px!important;padding-left:6px!important}
+.pdf-table tfoot td{height:29px!important;font-size:7.6px!important}
+.w-no{width:32px!important}
+.w-name{width:155px!important}
+.w-sub{width:82px!important}
+.w-average{width:100px!important}
+.w-notes{width:121px!important}
+.report-footer{height:20px!important;margin-top:5px!important;font-size:6.8px!important}
