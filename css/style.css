@@ -436,3 +436,32 @@ body.app-body{letter-spacing:.05px}
 @media(max-width:900px){
   .app-school-header{width:46px!important;height:46px!important;max-width:46px!important;max-height:46px!important}
 }
+
+
+/* FINAL FIX — preserve official HIS header proportions */
+.school-head.official-his-head{
+  height:76px!important;
+  min-height:76px!important;
+  width:100%!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  background:#fff!important;
+  border:0!important;
+  padding:0!important;
+  margin:0 0 2px!important;
+  overflow:hidden!important;
+}
+.school-head.official-his-head .official-his-image{
+  display:block!important;
+  width:auto!important;
+  height:76px!important;
+  max-width:100%!important;
+  max-height:76px!important;
+  object-fit:contain!important;
+  object-position:center center!important;
+  transform:none!important;
+  margin:0 auto!important;
+  padding:0!important;
+  border:0!important;
+}
