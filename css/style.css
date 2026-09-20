@@ -255,3 +255,8 @@ body.app-body{letter-spacing:.05px}
 /* HIS HEADER IMAGE — preserve the original full logo strip */
 .pdf-brand-image{width:100%!important;height:92px!important;display:flex!important;align-items:center!important;justify-content:center!important;background:#fff!important;overflow:hidden!important;padding:0!important}
 .pdf-brand-image img{display:block!important;width:100%!important;height:auto!important;max-height:92px!important;object-fit:contain!important;object-position:center!important}
+
+/* HIS HEADER IMAGE — exact aspect ratio, no distortion */
+.pdf-brand-image{width:100%!important;height:78px!important;display:flex!important;align-items:center!important;justify-content:center!important;background:#fff!important;overflow:hidden!important;border-top:0!important;padding:0!important}
+.pdf-brand-image img{display:block!important;width:100%!important;height:auto!important;max-height:78px!important;object-fit:contain!important;object-position:center center!important;margin:0!important;padding:0!important;border:0!important}
+.app-school-header{width:240px!important;height:auto!important;max-height:46px!important;object-fit:contain!important;object-position:center!important}
