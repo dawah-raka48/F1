@@ -43,7 +43,35 @@ async function deleteAssessment(id){
 function renderReports(){
   list.innerHTML=d.assessments.length?d.assessments.slice().reverse().map(a=>'<div class="report-item"><div><strong>'+esc(a.className)+' — Week '+esc(a.week)+'</strong><small>'+esc(a.teacher)+' · '+esc(a.from||'')+'</small></div><div><button class="btn ghost" onclick="showPdf(getData().assessments.find(x=>x.id=='+a.id+'))"><i class="fa-solid fa-eye"></i> Preview</button> <button class="btn primary" onclick="downloadPdf(getData().assessments.find(x=>x.id=='+a.id+'))"><i class="fa-solid fa-file-pdf"></i> PDF</button> <button class="btn danger" data-delete-assessment="'+a.id+'" onclick="deleteAssessment('+a.id+')"><i class="fa-solid fa-trash"></i> Delete</button></div></div>').join(''):'<div class="empty-state"><div><i class="fa-solid fa-file-circle-plus"></i></div><h3>No saved assessments yet</h3><p>Complete an assessment first, then return here to export it.</p></div>';
 }
-async function downloadPdf(a){if(!a)return;showPdf(a);const el=document.getElementById('sheet');await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));await html2pdf().set({margin:0,filename:'HIS_'+a.className+'_Week_'+a.week+'.pdf',image:{type:'jpeg',quality:1},html2canvas:{scale:4,useCORS:true,backgroundColor:'#fff',logging:false,letterRendering:true,width:1122,height:794,windowWidth:1122,windowHeight:794,scrollX:0,scrollY:0},pagebreak:{mode:['avoid-all']},jsPDF:{unit:'mm',format:[297,210],orientation:'landscape',compress:true}}).from(el).save();area.style.position='absolute'}
+async function downloadPdf(a){
+  if(!a)return;
+  showPdf(a);
+  const el=document.getElementById('sheet');
+  await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
+  const canvas=await html2canvas(el,{
+    scale:3,
+    useCORS:true,
+    backgroundColor:'#fff',
+    logging:false,
+    letterRendering:true,
+    width:1122,
+    height:794,
+    windowWidth:1122,
+    windowHeight:794,
+    scrollX:0,
+    scrollY:0
+  });
+  const {jsPDF}=window.jspdf;
+  const pdf=new jsPDF({
+    unit:'mm',
+    format:'a4',
+    orientation:'landscape',
+    compress:true
+  });
+  pdf.addImage(canvas.toDataURL('image/jpeg',1),'JPEG',0,0,297,210,undefined,'FAST');
+  pdf.save('HIS_'+a.className+'_Week_'+a.week+'.pdf');
+  area.style.position='absolute';
+}
 async function initReports(){
  try{
    d=await window.hisReady;
