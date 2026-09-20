@@ -1,4 +1,4 @@
-const d=getData(),list=document.getElementById('reports'),area=document.getElementById('pdfArea');
+let d,list,area;
 function ratingClass(v){const s=String(v||'').toLowerCase();if(s.includes('excellent'))return'r-excellent';if(s.includes('very good'))return'r-very';if(s==='good')return'r-good';if(s.includes('needs'))return'r-needs';return'r-empty'}
 function build(a){
  const subjects=['Reading','Grammar','Dictation','Phonics','Writing','Homework','Classwork','Commitment'];
@@ -14,6 +14,7 @@ function build(a){
  '</div>';
 }
 function showPdf(a){
+ if(!a)return;
  area.innerHTML='<div class="preview-overlay"><div class="preview-toolbar"><div><strong>Report Preview</strong><span>'+esc(a.className)+' · Week '+esc(a.week||'')+'</span></div><div class="preview-tools"><button class="btn ghost" onclick="closePreview()"><i class="fa-solid fa-xmark"></i> Close</button><button class="btn primary" onclick="downloadPdf(getData().assessments.find(x=>x.id=='+a.id+'))"><i class="fa-solid fa-file-pdf"></i> Download PDF</button></div></div><div class="preview-viewport"><div class="preview-stage">'+build(a)+'</div></div></div>';
  area.style.position='fixed';area.style.left='0';area.style.top='0';area.style.width='100%';area.style.height='100%';area.style.zIndex='9999';area.style.display='block';area.style.background='#17212b';
  const sheet=area.querySelector('.pdf-sheet'),stage=area.querySelector('.preview-stage'),viewport=area.querySelector('.preview-viewport');
@@ -21,5 +22,12 @@ function showPdf(a){
  requestAnimationFrame(fit);window.addEventListener('resize',fit,{once:false});window.scrollTo(0,0);
 }
 function closePreview(){area.innerHTML='';area.style.cssText='position:absolute;left:-30000px;top:0;width:1122px;background:#fff;display:none'}
-list.innerHTML=d.assessments.length?d.assessments.slice().reverse().map(a=>'<div class="report-item"><div><strong>'+esc(a.className)+' — Week '+esc(a.week)+'</strong><small>'+esc(a.teacher)+' · '+esc(a.from||'')+'</small></div><div><button class="btn ghost" onclick="showPdf(getData().assessments.find(x=>x.id=='+a.id+'))"><i class="fa-solid fa-eye"></i> Preview</button> <button class="btn primary" onclick="downloadPdf(getData().assessments.find(x=>x.id=='+a.id+'))"><i class="fa-solid fa-file-pdf"></i> PDF</button></div></div>').join(''):'<div class="empty-state"><div><i class="fa-solid fa-file-circle-plus"></i></div><h3>No saved assessments yet</h3><p>Complete an assessment first, then return here to export it.</p></div>';
-async function downloadPdf(a){showPdf(a);const el=document.getElementById('sheet');await html2pdf().set({margin:0,filename:'HIS_'+a.className+'_Week_'+a.week+'.pdf',image:{type:'jpeg',quality:1},html2canvas:{scale:4,useCORS:true,backgroundColor:'#fff',logging:false,letterRendering:true},pagebreak:{mode:['avoid-all']},jsPDF:{unit:'mm',format:'a4',orientation:'landscape',compress:true}}).from(el).save();area.style.position='absolute'}
+async function downloadPdf(a){if(!a)return;showPdf(a);const el=document.getElementById('sheet');await html2pdf().set({margin:0,filename:'HIS_'+a.className+'_Week_'+a.week+'.pdf',image:{type:'jpeg',quality:1},html2canvas:{scale:4,useCORS:true,backgroundColor:'#fff',logging:false,letterRendering:true},pagebreak:{mode:['avoid-all']},jsPDF:{unit:'mm',format:'a4',orientation:'landscape',compress:true}}).from(el).save();area.style.position='absolute'}
+async function initReports(){
+ try{
+   d=await window.hisReady;
+   list=document.getElementById('reports');area=document.getElementById('pdfArea');
+   list.innerHTML=d.assessments.length?d.assessments.slice().reverse().map(a=>'<div class="report-item"><div><strong>'+esc(a.className)+' — Week '+esc(a.week)+'</strong><small>'+esc(a.teacher)+' · '+esc(a.from||'')+'</small></div><div><button class="btn ghost" onclick="showPdf(getData().assessments.find(x=>x.id=='+a.id+'))"><i class="fa-solid fa-eye"></i> Preview</button> <button class="btn primary" onclick="downloadPdf(getData().assessments.find(x=>x.id=='+a.id+'))"><i class="fa-solid fa-file-pdf"></i> PDF</button></div></div>').join(''):'<div class="empty-state"><div><i class="fa-solid fa-file-circle-plus"></i></div><h3>No saved assessments yet</h3><p>Complete an assessment first, then return here to export it.</p></div>';
+ }catch(error){console.error(error);document.getElementById('reports').innerHTML='<div class="empty-state"><h3>Google Sheets connection failed</h3><p>Please check the Apps Script deployment.</p></div>'}
+}
+initReports();
