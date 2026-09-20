@@ -551,3 +551,101 @@ body.app-body{letter-spacing:.05px}
   padding:0!important;
   border:0!important;
 }
+
+
+/* FINAL A4 PDF BALANCED LAYOUT */
+.pdf-sheet{
+  width:1122px!important;
+  height:794px!important;
+  min-height:794px!important;
+  max-height:794px!important;
+  box-sizing:border-box!important;
+  padding:8px 16px 7px!important;
+  overflow:hidden!important;
+}
+.school-head.official-his-head{
+  width:100%!important;
+  height:92px!important;
+  min-height:92px!important;
+  display:block!important;
+  background:#fff!important;
+  border:0!important;
+  padding:0!important;
+  margin:0 0 4px!important;
+  overflow:hidden!important;
+  line-height:0!important;
+}
+.school-head.official-his-head .official-his-image{
+  display:block!important;
+  width:100%!important;
+  height:108px!important;
+  max-width:100%!important;
+  max-height:none!important;
+  object-fit:cover!important;
+  object-position:center center!important;
+  transform:none!important;
+  margin:-8px auto 0!important;
+  padding:0!important;
+  border:0!important;
+}
+.report-title{
+  height:36px!important;
+  margin:0 0 6px!important;
+  border-radius:6px!important;
+  font-size:14px!important;
+}
+.report-title strong{font-size:14px!important}
+.info-grid{
+  gap:7px!important;
+  margin:0 0 5px!important;
+}
+.info-grid>div{
+  height:30px!important;
+  padding:4px 8px!important;
+  gap:8px!important;
+}
+.info-grid label{font-size:6.5px!important}
+.info-grid b{font-size:8.5px!important}
+.scale-box{
+  height:22px!important;
+  margin:0 0 5px!important;
+  gap:16px!important;
+  font-size:6.8px!important;
+}
+.scale-box strong{font-size:7.5px!important}
+.pdf-table th{
+  height:24px!important;
+  padding:3px 2px!important;
+  font-size:7px!important;
+}
+.pdf-table td{
+  height:24px!important;
+  padding:2px!important;
+  font-size:7.5px!important;
+}
+.pdf-table .c-name{font-size:7.7px!important;padding-left:6px!important}
+.pdf-table .c-mark{font-size:9.5px!important}
+.pdf-table .c-average{font-size:6.5px!important}
+.pdf-table .c-average span{min-width:58px!important;padding:2px 4px!important}
+.pdf-table .c-notes{font-size:6.8px!important;padding-left:5px!important}
+.pdf-table tfoot td{
+  height:24px!important;
+  font-size:7px!important;
+}
+.w-no{width:4%!important}.w-name{width:16%!important}.w-sub{width:7%!important}.w-average{width:10%!important}.w-notes{width:14%!important}
+.report-bottom{
+  height:36px!important;
+  margin-top:5px!important;
+  padding-top:5px!important;
+  border-top:1px solid #d6e2e5!important;
+  display:grid!important;
+  grid-template-columns:1fr 1fr 1fr!important;
+  align-items:end!important;
+  color:#536d79!important;
+  font-size:7px!important;
+}
+.report-bottom>div{display:flex!important;align-items:flex-end!important;gap:6px!important}
+.report-bottom>div:nth-child(2){justify-content:center!important;text-align:center!important;color:#123f54!important;display:flex!important;flex-direction:column!important;align-items:center!important;gap:2px!important}
+.report-bottom>div:nth-child(3){justify-content:flex-end!important}
+.report-bottom span{display:inline-block!important;width:95px!important;border-bottom:1px solid #8ca6ae!important;height:12px!important}
+.report-bottom small{font-size:6px!important}
