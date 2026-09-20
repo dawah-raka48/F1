@@ -356,3 +356,32 @@ body.app-body{letter-spacing:.05px}
   padding:0!important;
   border:0!important;
 }
+
+
+/* FINAL FIX — make the official HIS banner visibly taller without changing its horizontal coverage */
+.school-head.official-his-head{
+  height:108px!important;
+  min-height:108px!important;
+  width:100%!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  background:#fff!important;
+  overflow:hidden!important;
+  padding:0 8px!important;
+  margin:0!important;
+}
+.school-head.official-his-head .official-his-image{
+  display:block!important;
+  width:100%!important;
+  height:96px!important;
+  max-width:none!important;
+  max-height:none!important;
+  object-fit:fill!important;
+  object-position:center!important;
+  transform:scaleY(1.55)!important;
+  transform-origin:center center!important;
+  margin:0!important;
+  padding:0!important;
+  border:0!important;
+}
