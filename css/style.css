@@ -385,3 +385,36 @@ body.app-body{letter-spacing:.05px}
   padding:0!important;
   border:0!important;
 }
+
+
+/* FINAL PAGE HEADER — compact official HIS logo */
+.app-school-header{
+  display:block!important;
+  width:185px!important;
+  height:48px!important;
+  max-width:185px!important;
+  max-height:48px!important;
+  object-fit:contain!important;
+  object-position:center!important;
+  border-radius:2px!important;
+  background:#fff!important;
+  padding:3px 7px!important;
+  box-sizing:border-box!important;
+}
+.app-brand-text{display:none!important}
+@media(max-width:900px){
+  .app-school-header{
+    width:165px!important;
+    height:44px!important;
+    max-width:165px!important;
+    max-height:44px!important;
+  }
+}
+@media(max-width:600px){
+  .app-school-header{
+    width:145px!important;
+    height:40px!important;
+    max-width:145px!important;
+    max-height:40px!important;
+  }
+}
