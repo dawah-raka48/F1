@@ -36,3 +36,7 @@
 .pdf-table .c-notes{font-size:7px!important}
 .w-no{width:31px!important}.w-name{width:138px!important}.w-sub{width:65px!important}.w-average{width:88px!important}.w-notes{width:105px!important}
 .report-footer{height:18px!important;margin-top:4px!important;font-size:6.5px!important}
+
+/* Center the report table and keep it comfortably contained on the A4 page */
+.pdf-table{width:96%!important;max-width:96%!important;margin:0 auto!important}
+.report-footer{width:96%!important;margin-left:auto!important;margin-right:auto!important}
