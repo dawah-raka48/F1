@@ -694,3 +694,33 @@ body.app-body{letter-spacing:.05px}
   height:34px!important;
   margin-top:5px!important;
 }
+
+
+/* FINAL HEADER PROPORTION FIX — never stretch the official banner */
+.school-head.official-his-head{
+  width:100%!important;
+  height:105px!important;
+  min-height:105px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  background:#fff!important;
+  border:0!important;
+  padding:0!important;
+  margin:0 0 4px!important;
+  overflow:hidden!important;
+  line-height:0!important;
+}
+.school-head.official-his-head .official-his-image{
+  display:block!important;
+  width:100%!important;
+  height:auto!important;
+  max-width:100%!important;
+  max-height:105px!important;
+  object-fit:contain!important;
+  object-position:center center!important;
+  transform:none!important;
+  margin:0 auto!important;
+  padding:0!important;
+  border:0!important;
+}
