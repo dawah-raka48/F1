@@ -45,32 +45,62 @@ function renderReports(){
 }
 async function downloadPdf(a){
   if(!a)return;
-  showPdf(a);
-  const el=document.getElementById('sheet');
-  await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
-  const canvas=await html2canvas(el,{
-    scale:3,
-    useCORS:true,
-    backgroundColor:'#fff',
-    logging:false,
-    letterRendering:true,
-    width:1122,
-    height:794,
-    windowWidth:1122,
-    windowHeight:794,
-    scrollX:0,
-    scrollY:0
-  });
-  const {jsPDF}=window.jspdf;
-  const pdf=new jsPDF({
-    unit:'mm',
-    format:'a4',
-    orientation:'landscape',
-    compress:true
-  });
-  pdf.addImage(canvas.toDataURL('image/jpeg',1),'JPEG',0,0,297,210,undefined,'FAST');
-  pdf.save('HIS_'+a.className+'_Week_'+a.week+'.pdf');
-  area.style.position='absolute';
+  const button=[...document.querySelectorAll('.report-item .btn.primary')].find(b=>b.getAttribute('onclick')?.includes(String(a.id)));
+  if(button)setButtonBusy(button,'Preparing...');
+
+  try{
+    showPdf(a);
+    const el=document.getElementById('sheet');
+    await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
+
+    const canvas=await html2canvas(el,{
+      scale:3,
+      useCORS:true,
+      backgroundColor:'#fff',
+      logging:false,
+      letterRendering:true,
+      width:1122,
+      height:794,
+      windowWidth:1122,
+      windowHeight:794,
+      scrollX:0,
+      scrollY:0
+    });
+
+    const {jsPDF}=window.jspdf;
+    const pdf=new jsPDF({
+      unit:'mm',
+      format:'a4',
+      orientation:'landscape',
+      compress:true
+    });
+
+    pdf.addImage(canvas.toDataURL('image/jpeg',1),'JPEG',0,0,297,210,undefined,'FAST');
+
+    const filename='HIS_'+a.className+'_Week_'+a.week+'.pdf';
+    const blob=pdf.output('blob');
+    const file=new File([blob],filename,{type:'application/pdf'});
+
+    if(navigator.share && (!navigator.canShare || navigator.canShare({files:[file]}))){
+      await navigator.share({
+        title:'HIS Assessment Report',
+        text:a.className+' — Week '+a.week,
+        files:[file]
+      });
+      toast('Ready to share');
+    }else{
+      pdf.save(filename);
+      toast('PDF downloaded successfully');
+    }
+  }catch(error){
+    if(error?.name!=='AbortError'){
+      console.error(error);
+      toast('Could not create PDF','error');
+    }
+  }finally{
+    if(button)restoreButton(button);
+    area.style.position='absolute';
+  }
 }
 async function initReports(){
  try{
