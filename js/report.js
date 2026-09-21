@@ -18,7 +18,7 @@ function showPdf(a){
  area.innerHTML='<div class="preview-overlay"><div class="preview-toolbar"><div><strong>Report Preview</strong><span>'+esc(a.className)+' · Week '+esc(a.week||'')+'</span></div><div class="preview-tools"><button class="btn ghost" onclick="closePreview()"><i class="fa-solid fa-xmark"></i> Close</button><button class="btn primary" onclick="downloadPdf(getData().assessments.find(x=>x.id=='+a.id+'))"><i class="fa-solid fa-file-pdf"></i> Download PDF</button></div></div><div class="preview-viewport"><div class="preview-stage">'+build(a)+'</div></div></div>';
  area.style.position='fixed';area.style.left='0';area.style.top='0';area.style.width='100%';area.style.height='100%';area.style.zIndex='9999';area.style.display='block';area.style.background='#17212b';
  const sheet=area.querySelector('.pdf-sheet'),stage=area.querySelector('.preview-stage'),viewport=area.querySelector('.preview-viewport');
- const fit=()=>{const maxW=Math.min(1122,viewport.clientWidth-48),scale=maxW/1122;sheet.style.transform='scale('+scale+')';sheet.style.transformOrigin='top center';stage.style.width=(1122*scale)+'px';stage.style.height=(794*scale)+'px'};
+ const fit=()=>{const available=Math.max(280,viewport.clientWidth-24);const scale=Math.min(1,available/1122);sheet.style.transform='scale('+scale+')';sheet.style.transformOrigin='top left';stage.style.width=(1122*scale)+'px';stage.style.height=(794*scale)+'px';stage.style.margin='0 auto'};
  requestAnimationFrame(fit);window.addEventListener('resize',fit,{once:false});window.scrollTo(0,0);
 }
 function closePreview(){area.innerHTML='';area.style.cssText='position:absolute;left:-30000px;top:0;width:1122px;background:#fff;display:none'}
