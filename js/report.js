@@ -115,7 +115,7 @@ async function buildPdfFile(a){
     if(!canvas||canvas.width<1000||canvas.height<700)throw new Error('Invalid PDF canvas');
 
     const pdf=await worker.toPdf().get('pdf');
-    pdf.deletePage(2);
+    if(typeof pdf.getNumberOfPages==='function'){while(pdf.getNumberOfPages()>1)pdf.deletePage(pdf.getNumberOfPages());}
     const blob=pdf.output('blob');
     if(!blob||blob.size<1000)throw new Error('Empty PDF file');
 
