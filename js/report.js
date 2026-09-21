@@ -25,7 +25,7 @@ function closePreview(){area.innerHTML='';area.style.cssText='position:absolute;
 async function deleteAssessment(id){
   const a=getData().assessments.find(x=>String(x.id)===String(id));
   if(!a)return;
-  if(!confirm('Delete this assessment? This will also delete all marks for this assessment.'))return;
+  if(!await platformConfirm('Delete this assessment? This will also delete all marks for this assessment.','Delete Assessment','All marks belonging to this assessment will also be removed.'))return;
   const buttons=[...document.querySelectorAll('[data-delete-assessment="'+id+'"]')];
   buttons.forEach(b=>setButtonBusy(b,'Deleting...'));
   try{
