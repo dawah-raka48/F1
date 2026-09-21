@@ -788,3 +788,50 @@ body.app-body{letter-spacing:.05px}
 
 /* PWA install dialog */
 .install-backdrop{position:fixed;inset:0;background:#071c2e99;backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:20px;z-index:12000}.install-card{position:relative;width:min(430px,100%);background:#fff;border-radius:22px;padding:28px;box-shadow:0 30px 80px #061a2d55;text-align:center;color:#172433}.install-close{position:absolute;right:14px;top:12px;border:0;background:#f1f4f7;width:34px;height:34px;border-radius:9px;font-size:22px;cursor:pointer}.install-icon{width:70px;height:70px;margin:0 auto 14px;border-radius:18px;background:#eef8f7;display:grid;place-items:center;overflow:hidden}.install-icon img{width:58px;height:58px;object-fit:contain}.install-card h2{margin:0 0 7px;font-size:21px}.install-card p{margin:0 0 18px;color:#718096;font-size:12px}.install-now{width:100%;margin-bottom:15px}.install-steps{display:grid;gap:8px;text-align:left;background:#f7fafb;border:1px solid #e2e8f0;border-radius:13px;padding:14px;font-size:11px;color:#536575}.install-steps>b{font-size:12px;color:#123f54}.install-steps span{line-height:1.45}.install-steps span b{color:#007a70}@media(max-width:600px){.install-card{padding:24px 18px}}
+
+/* Mobile report cards — clean stacked layout */
+@media(max-width:600px){
+  .report-item{
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:stretch!important;
+    gap:14px!important;
+    padding:16px!important;
+    margin:10px 0!important;
+    border-radius:14px!important;
+    background:#fff!important;
+  }
+  .report-item>div:first-child{
+    width:100%!important;
+    text-align:left!important;
+  }
+  .report-item>div:first-child strong{
+    font-size:17px!important;
+    line-height:1.35!important;
+    color:#173f68!important;
+    margin:0 0 5px!important;
+  }
+  .report-item>div:first-child small{
+    display:block!important;
+    font-size:12px!important;
+    line-height:1.5!important;
+    color:#667381!important;
+  }
+  .report-item>div:last-child{
+    width:100%!important;
+    display:grid!important;
+    grid-template-columns:repeat(3,1fr)!important;
+    gap:7px!important;
+  }
+  .report-item .btn{
+    width:100%!important;
+    min-width:0!important;
+    padding:10px 5px!important;
+    font-size:12px!important;
+    border-radius:9px!important;
+    white-space:nowrap!important;
+  }
+  .report-item .btn i{
+    margin-right:4px!important;
+  }
+}
