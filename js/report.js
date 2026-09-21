@@ -43,60 +43,81 @@ async function deleteAssessment(id){
 function renderReports(){
   list.innerHTML=d.assessments.length?d.assessments.slice().reverse().map(a=>'<div class="report-item"><div><strong>'+esc(a.className)+' — Week '+esc(a.week)+'</strong><small>'+esc(a.teacher)+' · '+esc(a.from||'')+'</small></div><div><button class="btn ghost" onclick="showPdf(getData().assessments.find(x=>x.id=='+a.id+'))"><i class="fa-solid fa-eye"></i> Preview</button> <button class="btn primary" onclick="downloadPdf(getData().assessments.find(x=>x.id=='+a.id+'))"><i class="fa-solid fa-file-pdf"></i> PDF</button> <button class="btn danger" data-delete-assessment="'+a.id+'" onclick="deleteAssessment('+a.id+')"><i class="fa-solid fa-trash"></i> Delete</button></div></div>').join(''):'<div class="empty-state"><div><i class="fa-solid fa-file-circle-plus"></i></div><h3>No saved assessments yet</h3><p>Complete an assessment first, then return here to export it.</p></div>';
 }
+const pdfCache=new Map();
+
+async function buildPdfFile(a){
+  if(!a)return null;
+  const key=String(a.id);
+  if(pdfCache.has(key))return pdfCache.get(key);
+
+  showPdf(a);
+  const el=document.getElementById('sheet');
+  await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
+
+  const canvas=await html2canvas(el,{
+    scale:3,
+    useCORS:true,
+    backgroundColor:'#fff',
+    logging:false,
+    letterRendering:true,
+    width:1122,
+    height:794,
+    windowWidth:1122,
+    windowHeight:794,
+    scrollX:0,
+    scrollY:0
+  });
+
+  const {jsPDF}=window.jspdf;
+  const pdf=new jsPDF({unit:'mm',format:'a4',orientation:'landscape',compress:true});
+  pdf.addImage(canvas.toDataURL('image/jpeg',1),'JPEG',0,0,297,210,undefined,'FAST');
+
+  const filename='HIS_'+a.className+'_Week_'+a.week+'.pdf';
+  const blob=pdf.output('blob');
+  const file=new File([blob],filename,{type:'application/pdf'});
+  const result={file,blob,filename};
+  pdfCache.set(key,result);
+  return result;
+}
+
 async function downloadPdf(a){
   if(!a)return;
   const button=[...document.querySelectorAll('.report-item .btn.primary')].find(b=>b.getAttribute('onclick')?.includes(String(a.id)));
   if(button)setButtonBusy(button,'Preparing...');
 
   try{
-    showPdf(a);
-    const el=document.getElementById('sheet');
-    await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
+    const result=await buildPdfFile(a);
+    if(!result)throw new Error('PDF was not created');
 
-    const canvas=await html2canvas(el,{
-      scale:3,
-      useCORS:true,
-      backgroundColor:'#fff',
-      logging:false,
-      letterRendering:true,
-      width:1122,
-      height:794,
-      windowWidth:1122,
-      windowHeight:794,
-      scrollX:0,
-      scrollY:0
-    });
-
-    const {jsPDF}=window.jspdf;
-    const pdf=new jsPDF({
-      unit:'mm',
-      format:'a4',
-      orientation:'landscape',
-      compress:true
-    });
-
-    pdf.addImage(canvas.toDataURL('image/jpeg',1),'JPEG',0,0,297,210,undefined,'FAST');
-
-    const filename='HIS_'+a.className+'_Week_'+a.week+'.pdf';
-    const blob=pdf.output('blob');
-    const file=new File([blob],filename,{type:'application/pdf'});
-
-    if(navigator.share && (!navigator.canShare || navigator.canShare({files:[file]}))){
-      await navigator.share({
-        title:'HIS Assessment Report',
-        text:a.className+' — Week '+a.week,
-        files:[file]
-      });
-      toast('Ready to share');
-    }else{
-      pdf.save(filename);
-      toast('PDF downloaded successfully');
+    /* Share directly when the browser supports file sharing. */
+    if(navigator.share && (!navigator.canShare || navigator.canShare({files:[result.file]}))){
+      try{
+        await navigator.share({
+          title:'HIS Assessment Report',
+          text:a.className+' — Week '+a.week,
+          files:[result.file]
+        });
+        toast('Ready to share');
+        return;
+      }catch(shareError){
+        if(shareError?.name==='AbortError')return;
+      }
     }
+
+    /* Reliable fallback: download the actual PDF file. */
+    const url=URL.createObjectURL(result.blob);
+    const link=document.createElement('a');
+    link.href=url;
+    link.download=result.filename;
+    link.rel='noopener';
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),5000);
+    toast('PDF downloaded successfully');
   }catch(error){
-    if(error?.name!=='AbortError'){
-      console.error(error);
-      toast('Could not create PDF','error');
-    }
+    console.error(error);
+    toast('Could not create PDF','error');
   }finally{
     if(button)restoreButton(button);
     area.style.position='absolute';
