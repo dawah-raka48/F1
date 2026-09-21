@@ -51,42 +51,69 @@ async function buildPdfFile(a){
   if(pdfCache.has(key))return pdfCache.get(key);
 
   showPdf(a);
-  const el=document.getElementById('sheet');
+  const source=document.getElementById('sheet');
   await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
 
   if(typeof html2pdf!=='function') throw new Error('PDF library is not loaded');
 
-  const filename='HIS_'+a.className+'_Week_'+a.week+'.pdf';
-  const options={
-    margin:0,
-    filename,
-    image:{type:'jpeg',quality:1},
-    html2canvas:{
-      scale:3,
-      useCORS:true,
-      backgroundColor:'#fff',
-      logging:false,
-      letterRendering:true,
-      width:1122,
-      height:794,
-      windowWidth:1122,
-      windowHeight:794,
-      scrollX:0,
-      scrollY:0
-    },
-    pagebreak:{mode:['avoid-all']},
-    jsPDF:{unit:'mm',format:'a4',orientation:'landscape',compress:true}
-  };
+  /*
+   * The preview is scaled to fit the phone screen. Never capture that
+   * scaled preview; clone the original A4 sheet at its real 1122x794 size.
+   */
+  const clone=source.cloneNode(true);
+  clone.removeAttribute('id');
+  clone.style.cssText=[
+    'position:fixed',
+    'left:-20000px',
+    'top:0',
+    'width:1122px',
+    'height:794px',
+    'min-height:794px',
+    'max-height:794px',
+    'transform:none!important',
+    'transform-origin:top left',
+    'margin:0!important',
+    'box-sizing:border-box',
+    'overflow:hidden',
+    'background:#fff',
+    'z-index:-1'
+  ].join(';');
+  document.body.appendChild(clone);
 
-  const blob=await html2pdf().set(options).from(el).outputPdf('blob');
-  if(!blob||blob.size<1000)throw new Error('Empty PDF file');
+  try{
+    const filename='HIS_'+a.className+'_Week_'+a.week+'.pdf';
+    const options={
+      margin:0,
+      filename,
+      image:{type:'jpeg',quality:1},
+      html2canvas:{
+        scale:3,
+        useCORS:true,
+        backgroundColor:'#fff',
+        logging:false,
+        letterRendering:true,
+        width:1122,
+        height:794,
+        windowWidth:1122,
+        windowHeight:794,
+        scrollX:0,
+        scrollY:0
+      },
+      pagebreak:{mode:'avoid-all'},
+      jsPDF:{unit:'mm',format:'a4',orientation:'landscape',compress:true}
+    };
 
-  const file=new File([blob],filename,{type:'application/pdf'});
-  const result={file,blob,filename};
-  pdfCache.set(key,result);
-  return result;
+    const blob=await html2pdf().set(options).from(clone).outputPdf('blob');
+    if(!blob||blob.size<1000)throw new Error('Empty PDF file');
+
+    const file=new File([blob],filename,{type:'application/pdf'});
+    const result={file,blob,filename};
+    pdfCache.set(key,result);
+    return result;
+  }finally{
+    clone.remove();
+  }
 }
-
 async function downloadPdf(a){
   if(!a)return;
   const button=[...document.querySelectorAll('.report-item .btn.primary')].find(b=>b.getAttribute('onclick')?.includes(String(a.id)));
