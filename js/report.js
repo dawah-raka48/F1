@@ -54,26 +54,33 @@ async function buildPdfFile(a){
   const el=document.getElementById('sheet');
   await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
 
-  const canvas=await html2canvas(el,{
-    scale:3,
-    useCORS:true,
-    backgroundColor:'#fff',
-    logging:false,
-    letterRendering:true,
-    width:1122,
-    height:794,
-    windowWidth:1122,
-    windowHeight:794,
-    scrollX:0,
-    scrollY:0
-  });
-
-  const {jsPDF}=window.jspdf;
-  const pdf=new jsPDF({unit:'mm',format:'a4',orientation:'landscape',compress:true});
-  pdf.addImage(canvas.toDataURL('image/jpeg',1),'JPEG',0,0,297,210,undefined,'FAST');
+  if(typeof html2pdf!=='function') throw new Error('PDF library is not loaded');
 
   const filename='HIS_'+a.className+'_Week_'+a.week+'.pdf';
-  const blob=pdf.output('blob');
+  const options={
+    margin:0,
+    filename,
+    image:{type:'jpeg',quality:1},
+    html2canvas:{
+      scale:3,
+      useCORS:true,
+      backgroundColor:'#fff',
+      logging:false,
+      letterRendering:true,
+      width:1122,
+      height:794,
+      windowWidth:1122,
+      windowHeight:794,
+      scrollX:0,
+      scrollY:0
+    },
+    pagebreak:{mode:['avoid-all']},
+    jsPDF:{unit:'mm',format:'a4',orientation:'landscape',compress:true}
+  };
+
+  const blob=await html2pdf().set(options).from(el).outputPdf('blob');
+  if(!blob||blob.size<1000)throw new Error('Empty PDF file');
+
   const file=new File([blob],filename,{type:'application/pdf'});
   const result={file,blob,filename};
   pdfCache.set(key,result);
@@ -89,7 +96,6 @@ async function downloadPdf(a){
     const result=await buildPdfFile(a);
     if(!result)throw new Error('PDF was not created');
 
-    /* Share directly when the browser supports file sharing. */
     if(navigator.share && (!navigator.canShare || navigator.canShare({files:[result.file]}))){
       try{
         await navigator.share({
@@ -104,19 +110,19 @@ async function downloadPdf(a){
       }
     }
 
-    /* Reliable fallback: download the actual PDF file. */
     const url=URL.createObjectURL(result.blob);
     const link=document.createElement('a');
     link.href=url;
     link.download=result.filename;
+    link.target='_blank';
     link.rel='noopener';
     document.body.appendChild(link);
     link.click();
     link.remove();
-    setTimeout(()=>URL.revokeObjectURL(url),5000);
+    setTimeout(()=>URL.revokeObjectURL(url),10000);
     toast('PDF downloaded successfully');
   }catch(error){
-    console.error(error);
+    console.error('PDF export error:',error);
     toast('Could not create PDF','error');
   }finally{
     if(button)restoreButton(button);
