@@ -52,46 +52,54 @@ async function buildPdfFile(a){
 
   showPdf(a);
   const source=document.getElementById('sheet');
+  const stage=source?.parentElement;
+  if(!source)throw new Error('Report sheet not found');
   await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
+  await document.fonts?.ready;
 
-  if(typeof html2pdf!=='function') throw new Error('PDF library is not loaded');
+  if(typeof html2pdf!=='function')throw new Error('PDF library is not loaded');
 
-  /*
-   * The preview is scaled to fit the phone screen. Never capture that
-   * scaled preview; clone the original A4 sheet at its real 1122x794 size.
-   */
-  const clone=source.cloneNode(true);
-  clone.removeAttribute('id');
-  clone.style.cssText=[
-    'position:fixed',
-    'left:-20000px',
-    'top:0',
-    'width:1122px',
-    'height:794px',
-    'min-height:794px',
-    'max-height:794px',
-    'transform:none!important',
-    'transform-origin:top left',
-    'margin:0!important',
-    'box-sizing:border-box',
-    'overflow:hidden',
-    'background:#fff',
-    'z-index:-1'
-  ].join(';');
-  document.body.appendChild(clone);
+  const filename='HIS_'+a.className+'_Week_'+a.week+'.pdf';
+
+  /* Temporarily restore the report to its real A4 canvas size.
+     The mobile preview scale must never be captured into the PDF. */
+  const old={
+    transform:source.style.transform,
+    transformOrigin:source.style.transformOrigin,
+    width:source.style.width,
+    height:source.style.height,
+    position:source.style.position,
+    left:source.style.left,
+    top:source.style.top,
+    margin:source.style.margin
+  };
 
   try{
-    const filename='HIS_'+a.className+'_Week_'+a.week+'.pdf';
-    const options={
+    source.style.transform='none';
+    source.style.transformOrigin='top left';
+    source.style.width='1122px';
+    source.style.height='794px';
+    source.style.position='relative';
+    source.style.left='0';
+    source.style.top='0';
+    source.style.margin='0';
+
+    if(stage){
+      stage.style.width='1122px';
+      stage.style.height='794px';
+      stage.style.margin='0';
+    }
+
+    const worker=html2pdf().set({
       margin:0,
       filename,
       image:{type:'jpeg',quality:1},
       html2canvas:{
-        scale:3,
+        scale:2,
         useCORS:true,
+        allowTaint:false,
         backgroundColor:'#fff',
         logging:false,
-        letterRendering:true,
         width:1122,
         height:794,
         windowWidth:1122,
@@ -99,11 +107,16 @@ async function buildPdfFile(a){
         scrollX:0,
         scrollY:0
       },
-      pagebreak:{mode:'avoid-all'},
-      jsPDF:{unit:'mm',format:'a4',orientation:'landscape',compress:true}
-    };
+      jsPDF:{unit:'mm',format:'a4',orientation:'landscape',compress:true},
+      pagebreak:{mode:[]}
+    }).from(source).toCanvas();
 
-    const blob=await html2pdf().set(options).from(clone).outputPdf('blob');
+    const canvas=await worker.get('canvas');
+    if(!canvas||canvas.width<1000||canvas.height<700)throw new Error('Invalid PDF canvas');
+
+    const pdf=await worker.toPdf().get('pdf');
+    pdf.deletePage(2);
+    const blob=pdf.output('blob');
     if(!blob||blob.size<1000)throw new Error('Empty PDF file');
 
     const file=new File([blob],filename,{type:'application/pdf'});
@@ -111,7 +124,32 @@ async function buildPdfFile(a){
     pdfCache.set(key,result);
     return result;
   }finally{
-    clone.remove();
+    source.style.transform=old.transform;
+    source.style.transformOrigin=old.transformOrigin;
+    source.style.width=old.width;
+    source.style.height=old.height;
+    source.style.position=old.position;
+    source.style.left=old.left;
+    source.style.top=old.top;
+    source.style.margin=old.margin;
+    if(stage){
+      stage.style.width='';
+      stage.style.height='';
+      stage.style.margin='';
+    }
+    /* Re-fit the mobile preview after export. */
+    const viewport=source.closest('.preview-viewport');
+    if(viewport){
+      const available=Math.max(280,viewport.clientWidth-24);
+      const scale=Math.min(1,available/1122);
+      source.style.transform='scale('+scale+')';
+      source.style.transformOrigin='top left';
+      if(stage){
+        stage.style.width=(1122*scale)+'px';
+        stage.style.height=(794*scale)+'px';
+        stage.style.margin='0 auto';
+      }
+    }
   }
 }
 async function downloadPdf(a){
