@@ -47,8 +47,7 @@ const pdfCache=new Map();
 
 async function buildPdfFile(a){
   if(!a)return null;
-  const key=String(a.id)+'-'+Date.now();
-  
+
   showPdf(a);
   const source=document.getElementById('sheet');
   const stage=source?.parentElement;
@@ -58,7 +57,7 @@ async function buildPdfFile(a){
   await document.fonts?.ready;
 
   if(typeof html2canvas!=='function')throw new Error('PDF canvas library is not loaded');
-  if(typeof html2pdf!=='function')throw new Error('PDF library is not loaded');
+  if(!window.jspdf?.jsPDF)throw new Error('PDF engine is not loaded');
 
   const filename='HIS_'+a.className+'_Week_'+a.week+'.pdf';
 
@@ -108,35 +107,36 @@ async function buildPdfFile(a){
     }
 
     /*
-      Use html2pdf only as the PDF engine.
-      outputPdf('blob') is more reliable across Chrome, Safari and iOS
-      than reading the internal worker object.
+      Create exactly ONE A4 landscape page directly.
+      No html2pdf wrapper is used here, so it cannot create
+      an extra blank page from the 1122×794 report container.
     */
-    const worker=html2pdf().set({
-      margin:0,
-      image:{type:'jpeg',quality:1},
-      html2canvas:{
-        scale:1,
-        backgroundColor:'#fff',
-        logging:false
-      },
-      jsPDF:{
-        unit:'mm',
-        format:'a4',
-        orientation:'landscape',
-        compress:true
-      },
-      pagebreak:{mode:[]}
-    }).from(canvas).toPdf();
+    const {jsPDF}=window.jspdf;
+    const pdf=new jsPDF({
+      unit:'mm',
+      format:'a4',
+      orientation:'landscape',
+      compress:true
+    });
 
-    const pdfBlob=await worker.outputPdf('blob');
+    const image=canvas.toDataURL('image/jpeg',1);
 
-    if(!pdfBlob||pdfBlob.size<1000){
-      throw new Error('PDF blob was not created');
-    }
+    pdf.addImage(
+      image,
+      'JPEG',
+      0,
+      0,
+      297,
+      210,
+      undefined,
+      'FAST'
+    );
 
-    const file=new File([pdfBlob],filename,{type:'application/pdf'});
-    return {file,blob:pdfBlob,filename};
+    const blob=pdf.output('blob');
+    if(!blob||blob.size<1000)throw new Error('PDF blob was not created');
+
+    const file=new File([blob],filename,{type:'application/pdf'});
+    return {file,blob,filename};
 
   }finally{
     source.style.transform=old.transform;
