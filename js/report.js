@@ -58,7 +58,7 @@ async function buildPdfFile(a){
   await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
   await document.fonts?.ready;
 
-  if(typeof html2canvas!=='function')throw new Error('PDF canvas library is not loaded');
+  if(typeof html2pdf!=='function')throw new Error('PDF library is not loaded');
 
   const filename='HIS_'+a.className+'_Week_'+a.week+'.pdf';
 
@@ -75,12 +75,9 @@ async function buildPdfFile(a){
 
   try{
     /*
-      IMPORTANT:
-      Build the PDF from one fixed 1122 × 794 canvas, then place that
-      canvas directly onto one A4-landscape PDF page.
-
-      This avoids desktop Chrome calculating the HTML element as a
-      larger page than A4 and clipping the left/right sides.
+      Render one fixed report canvas first.
+      Then pass that canvas to html2pdf. This keeps the existing
+      working html2pdf download/share flow while forcing one A4 page.
     */
     source.style.transform='none';
     source.style.transformOrigin='top left';
@@ -115,31 +112,32 @@ async function buildPdfFile(a){
       throw new Error('Invalid PDF canvas');
     }
 
-    const JsPDF=window.jspdf?.jsPDF||window.jsPDF;
-    if(!JsPDF)throw new Error('PDF engine is not loaded');
+    const worker=html2pdf().set({
+      margin:0,
+      filename,
+      image:{type:'jpeg',quality:1},
+      html2canvas:{
+        scale:1,
+        backgroundColor:'#fff',
+        useCORS:true,
+        allowTaint:false,
+        logging:false
+      },
+      jsPDF:{
+        unit:'mm',
+        format:'a4',
+        orientation:'landscape',
+        compress:true
+      },
+      pagebreak:{mode:[]}
+    }).from(canvas).toPdf();
 
-    const pdf=new JsPDF({
-      unit:'mm',
-      format:'a4',
-      orientation:'landscape',
-      compress:true
-    });
+    const pdf=await worker.get('pdf');
 
-    /*
-      A4 landscape = 297 × 210 mm.
-      The entire report canvas is placed edge-to-edge on exactly one page.
-    */
-    const imageData=canvas.toDataURL('image/jpeg',1);
-    pdf.addImage(
-      imageData,
-      'JPEG',
-      0,
-      0,
-      297,
-      210,
-      undefined,
-      'FAST'
-    );
+    /* Guarantee exactly one page. */
+    while(typeof pdf.getNumberOfPages==='function' && pdf.getNumberOfPages()>1){
+      pdf.deletePage(pdf.getNumberOfPages());
+    }
 
     const blob=pdf.output('blob');
     if(!blob||blob.size<1000)throw new Error('Empty PDF file');
