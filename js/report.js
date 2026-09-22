@@ -58,6 +58,7 @@ async function buildPdfFile(a){
   await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
   await document.fonts?.ready;
 
+  if(typeof html2canvas!=='function')throw new Error('PDF canvas library is not loaded');
   if(typeof html2pdf!=='function')throw new Error('PDF library is not loaded');
 
   const filename='HIS_'+a.className+'_Week_'+a.week+'.pdf';
@@ -73,11 +74,15 @@ async function buildPdfFile(a){
     margin:source.style.margin
   };
 
+  let pdfHost=null;
+
   try{
     /*
-      Render one fixed report canvas first.
-      Then pass that canvas to html2pdf. This keeps the existing
-      working html2pdf download/share flow while forcing one A4 page.
+      Step 1: render the exact report canvas.
+      Step 2: put that canvas into an image.
+      Step 3: let html2pdf create the A4 PDF from that image.
+      This is intentionally used instead of passing a canvas directly
+      to html2pdf because browser implementations differ.
     */
     source.style.transform='none';
     source.style.transformOrigin='top left';
@@ -112,16 +117,36 @@ async function buildPdfFile(a){
       throw new Error('Invalid PDF canvas');
     }
 
+    const image=canvas.toDataURL('image/jpeg',1);
+
+    pdfHost=document.createElement('div');
+    pdfHost.style.cssText='position:fixed;left:-30000px;top:0;width:1122px;height:794px;background:#fff;overflow:hidden;margin:0;padding:0;';
+    const img=document.createElement('img');
+    img.src=image;
+    img.style.cssText='display:block;width:1122px;height:794px;margin:0;padding:0;border:0;';
+    pdfHost.appendChild(img);
+    document.body.appendChild(pdfHost);
+
+    await new Promise(resolve=>{
+      if(img.complete)resolve();
+      else img.onload=img.onerror=resolve;
+    });
+
     const worker=html2pdf().set({
       margin:0,
       filename,
       image:{type:'jpeg',quality:1},
       html2canvas:{
         scale:1,
-        backgroundColor:'#fff',
         useCORS:true,
-        allowTaint:false,
-        logging:false
+        backgroundColor:'#fff',
+        logging:false,
+        width:1122,
+        height:794,
+        windowWidth:1122,
+        windowHeight:794,
+        scrollX:0,
+        scrollY:0
       },
       jsPDF:{
         unit:'mm',
@@ -130,11 +155,10 @@ async function buildPdfFile(a){
         compress:true
       },
       pagebreak:{mode:[]}
-    }).from(canvas).toPdf();
+    }).from(pdfHost).toPdf();
 
     const pdf=await worker.get('pdf');
 
-    /* Guarantee exactly one page. */
     while(typeof pdf.getNumberOfPages==='function' && pdf.getNumberOfPages()>1){
       pdf.deletePage(pdf.getNumberOfPages());
     }
@@ -148,6 +172,8 @@ async function buildPdfFile(a){
     return result;
 
   }finally{
+    if(pdfHost)pdfHost.remove();
+
     source.style.transform=old.transform;
     source.style.transformOrigin=old.transformOrigin;
     source.style.width=old.width;
