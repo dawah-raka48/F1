@@ -54,15 +54,14 @@ async function buildPdfFile(a){
   const source=document.getElementById('sheet');
   const stage=source?.parentElement;
   if(!source)throw new Error('Report sheet not found');
+
   await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
   await document.fonts?.ready;
 
-  if(typeof html2pdf!=='function')throw new Error('PDF library is not loaded');
+  if(typeof html2canvas!=='function')throw new Error('PDF canvas library is not loaded');
 
   const filename='HIS_'+a.className+'_Week_'+a.week+'.pdf';
 
-  /* Temporarily restore the report to its real A4 canvas size.
-     The mobile preview scale must never be captured into the PDF. */
   const old={
     transform:source.style.transform,
     transformOrigin:source.style.transformOrigin,
@@ -75,6 +74,14 @@ async function buildPdfFile(a){
   };
 
   try{
+    /*
+      IMPORTANT:
+      Build the PDF from one fixed 1122 × 794 canvas, then place that
+      canvas directly onto one A4-landscape PDF page.
+
+      This avoids desktop Chrome calculating the HTML element as a
+      larger page than A4 and clipping the left/right sides.
+    */
     source.style.transform='none';
     source.style.transformOrigin='top left';
     source.style.width='1122px';
@@ -90,32 +97,50 @@ async function buildPdfFile(a){
       stage.style.margin='0';
     }
 
-    const worker=html2pdf().set({
-      margin:0,
-      filename,
-      image:{type:'jpeg',quality:1},
-      html2canvas:{
-        scale:2,
-        useCORS:true,
-        allowTaint:false,
-        backgroundColor:'#fff',
-        logging:false,
-        width:1122,
-        height:794,
-        windowWidth:1122,
-        windowHeight:794,
-        scrollX:0,
-        scrollY:0
-      },
-      jsPDF:{unit:'mm',format:'a4',orientation:'landscape',compress:true},
-      pagebreak:{mode:[]}
-    }).from(source).toCanvas();
+    const canvas=await html2canvas(source,{
+      scale:2,
+      useCORS:true,
+      allowTaint:false,
+      backgroundColor:'#fff',
+      logging:false,
+      width:1122,
+      height:794,
+      windowWidth:1122,
+      windowHeight:794,
+      scrollX:0,
+      scrollY:0
+    });
 
-    const canvas=await worker.get('canvas');
-    if(!canvas||canvas.width<1000||canvas.height<700)throw new Error('Invalid PDF canvas');
+    if(!canvas||canvas.width<2000||canvas.height<1400){
+      throw new Error('Invalid PDF canvas');
+    }
 
-    const pdf=await worker.toPdf().get('pdf');
-    if(typeof pdf.getNumberOfPages==='function'){while(pdf.getNumberOfPages()>1)pdf.deletePage(pdf.getNumberOfPages());}
+    const JsPDF=window.jspdf?.jsPDF||window.jsPDF;
+    if(!JsPDF)throw new Error('PDF engine is not loaded');
+
+    const pdf=new JsPDF({
+      unit:'mm',
+      format:'a4',
+      orientation:'landscape',
+      compress:true
+    });
+
+    /*
+      A4 landscape = 297 × 210 mm.
+      The entire report canvas is placed edge-to-edge on exactly one page.
+    */
+    const imageData=canvas.toDataURL('image/jpeg',1);
+    pdf.addImage(
+      imageData,
+      'JPEG',
+      0,
+      0,
+      297,
+      210,
+      undefined,
+      'FAST'
+    );
+
     const blob=pdf.output('blob');
     if(!blob||blob.size<1000)throw new Error('Empty PDF file');
 
@@ -123,6 +148,7 @@ async function buildPdfFile(a){
     const result={file,blob,filename};
     pdfCache.set(key,result);
     return result;
+
   }finally{
     source.style.transform=old.transform;
     source.style.transformOrigin=old.transformOrigin;
@@ -132,12 +158,13 @@ async function buildPdfFile(a){
     source.style.left=old.left;
     source.style.top=old.top;
     source.style.margin=old.margin;
+
     if(stage){
       stage.style.width='';
       stage.style.height='';
       stage.style.margin='';
     }
-    /* Re-fit the mobile preview after export. */
+
     const viewport=source.closest('.preview-viewport');
     if(viewport){
       const available=Math.max(280,viewport.clientWidth-24);
