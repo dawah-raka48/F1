@@ -1,20 +1,65 @@
 const API_URL='https://script.google.com/macros/s/AKfycbwbqGTNeSgPxBweqmDLXQK4kfccbLxXXHAs9a5Shn6im5x-BTcnp6iE8wTT3Jqdg6-WSA/exec';
 
-function apiGet(action='getData'){
-  return new Promise((resolve,reject)=>{
-    const callback='hisApiCallback_'+Date.now()+'_'+Math.random().toString(36).slice(2);
-    const script=document.createElement('script');
-    const cleanup=()=>{delete window[callback];script.remove()};
-    const timer=setTimeout(()=>{cleanup();reject(new Error('Google Sheets request timed out'))},15000);
-    window[callback]=(data)=>{
-      clearTimeout(timer);cleanup();
-      if(!data||data.success===false){reject(new Error(data?.error||'Google Sheets API error'));return}
-      resolve(data);
-    };
-    script.onerror=()=>{clearTimeout(timer);cleanup();reject(new Error('Could not connect to Google Apps Script'))};
-    script.src=API_URL+'?action='+encodeURIComponent(action)+'&callback='+encodeURIComponent(callback)+'&_='+Date.now();
-    document.head.appendChild(script);
-  });
+async function apiGet(action='getData'){
+  let lastError=null;
+
+  for(let attempt=1;attempt<=3;attempt++){
+    try{
+      const result=await new Promise((resolve,reject)=>{
+        const callback='hisApiCallback_'+Date.now()+'_'+attempt+'_'+Math.random().toString(36).slice(2);
+        const script=document.createElement('script');
+        let settled=false;
+
+        const cleanup=()=>{
+          if(script.parentNode)script.remove();
+          try{delete window[callback]}catch(e){window[callback]=undefined}
+        };
+
+        const finish=(error,data)=>{
+          if(settled)return;
+          settled=true;
+          clearTimeout(timer);
+          cleanup();
+          if(error)reject(error);
+          else resolve(data);
+        };
+
+        const timer=setTimeout(()=>{
+          finish(new Error('Google Sheets request timed out'));
+        },22000);
+
+        window[callback]=(data)=>{
+          if(!data||data.success===false){
+            finish(new Error(data?.error||'Google Sheets API error'));
+            return;
+          }
+          finish(null,data);
+        };
+
+        script.onerror=()=>{
+          finish(new Error('Could not connect to Google Apps Script'));
+        };
+
+        script.async=true;
+        script.src=API_URL+
+          '?action='+encodeURIComponent(action)+
+          '&callback='+encodeURIComponent(callback)+
+          '&_='+Date.now()+'_'+attempt;
+
+        document.head.appendChild(script);
+      });
+
+      return result;
+
+    }catch(error){
+      lastError=error;
+      if(attempt<3){
+        await new Promise(resolve=>setTimeout(resolve,800*attempt));
+      }
+    }
+  }
+
+  throw lastError||new Error('Could not connect to Google Apps Script');
 }
 
 async function apiPost(action,payload={}){
